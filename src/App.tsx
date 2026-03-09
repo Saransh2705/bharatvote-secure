@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/AdminLayout";
 import Index from "./pages/Index";
@@ -23,6 +23,10 @@ const queryClient = new QueryClient();
 
 const adminRoles: AdminRole[] = ['super', 'ec', 'state', 'district', 'constituency', 'booth', 'staff'];
 
+function PublicLayout() {
+  return <Layout><Outlet /></Layout>;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -30,7 +34,6 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Public routes */}
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Index />} />
             <Route path="/elections" element={<ElectionsPage />} />
@@ -44,7 +47,6 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
           </Route>
 
-          {/* Admin routes */}
           {adminRoles.map(role => (
             <Route key={role} path={`/admin/${role}`} element={<AdminLayout role={role} />}>
               <Route index element={<AdminDashboard role={role} />} />
@@ -58,11 +60,5 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-
-// Wrapper for public routes with Layout
-function PublicLayout() {
-  const { Outlet } = require('react-router-dom');
-  return <Layout><Outlet /></Layout>;
-}
 
 export default App;
