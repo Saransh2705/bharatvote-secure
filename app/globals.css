@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 224 60% 26%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 30 100% 60%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 224 60% 26%;
+
+    --radius: 0.375rem;
+
+    --saffron: 30 100% 60%;
+    --navy: 224 60% 26%;
+    --navy-dark: 224 65% 18%;
+    --green-india: 120 61% 34%;
+
+    --sidebar-background: 224 60% 26%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 30 100% 60%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 224 65% 22%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 224 50% 35%;
+    --sidebar-ring: 30 100% 60%;
+
+    --font-heading: var(--font-playfair-display);
+    --font-body: var(--font-noto-sans);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .govt-banner {
+    background: linear-gradient(135deg, hsl(var(--navy)) 0%, hsl(var(--navy-dark)) 100%);
+  }
+
+  .saffron-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, hsl(var(--saffron)), hsl(var(--green-india)));
+  }
+
+  .govt-card {
+    @apply bg-card border border-border rounded-md shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .govt-section {
+    @apply py-12 px-4;
+  }
+}
