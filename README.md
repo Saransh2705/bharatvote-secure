@@ -1,73 +1,114 @@
-# Welcome to your Lovable project
+# BharatVote - Secure Digital Voting Platform
 
-## Project info
+A secure, government-grade digital voting platform built with Next.js for the Indian election system.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Tech Stack
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - High-quality UI components
+- **Framer Motion** - Smooth animations
+- **Bun** - Fast JavaScript runtime and package manager
 
-## How can I deploy this project?
+## Getting Started
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Prerequisites
 
-## Can I connect a custom domain to my Lovable project?
+- Node.js 18+ or Bun installed
+- Git
+- Supabase account (for database)
+- Resend account (for emails)
 
-Yes, you can!
+### Installation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```sh
+# Clone the repository
+git clone <YOUR_GIT_URL>
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+# Navigate to the project directory
+cd bharatvote-secure
+
+# Install dependencies
+bun install
+# or
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your actual credentials
+
+# Start the development server
+bun run dev
+# or
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+### Environment Setup
+
+1. **Supabase Configuration:**
+   - Create a project at [supabase.com](https://supabase.com)
+   - Copy your project URL and anon key to `.env.local`
+   - Get service role key from Settings > API
+
+2. **Resend Email:**
+   - Sign up at [resend.com](https://resend.com)
+   - Add and verify your domain
+   - Copy API key to `.env.local`
+
+3. **NextAuth Secret:**
+   - Generate a secure secret: `openssl rand -base64 32`
+   - Add to `.env.local` as `NEXTAUTH_SECRET`
+
+See `.env.example` for all available configuration options.
+
+## Available Scripts
+
+- `bun run dev` - Start development server
+- `bun run build` - Create production build
+- `bun run start` - Start production server
+- `bun run lint` - Run ESLint
+
+## Project Structure
+
+```
+app/              # Next.js App Router pages
+components/       # Reusable React components
+lib/              # Utility functions and mock data
+hooks/            # Custom React hooks
+public/           # Static assets
+```
+
+## Features
+
+- Secure voter authentication with facial verification
+- Real-time election results
+- Multi-level admin system (Super, EC, State, District, Constituency, Booth)
+- Voter registration and verification
+- Booth locator with geolocation
+- Document management system
+- Help center and FAQs
+
+## Deployment
+
+### Vercel (Recommended)
+
+The easiest way to deploy this Next.js application:
+
+1. Push your code to GitHub
+2. Import the repository in [Vercel](https://vercel.com)
+3. Vercel will automatically detect Next.js and configure the build settings
+4. Deploy!
+
+### Other Platforms
+
+This Next.js app can be deployed to any platform that supports Node.js:
+- Netlify
+- Railway
+- AWS Amplify
+- Google Cloud Run
+- Self-hosted with Docker
