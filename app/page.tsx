@@ -1,12 +1,12 @@
 "use client"
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Vote, UserCheck, FileText, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ElectionCard from '@/components/ElectionCard';
 import StatCard from '@/components/StatCard';
-import { elections, announcements, documents } from '@/lib/mockData';
 import Layout from '@/components/Layout';
 
 const fadeUp = {
@@ -16,6 +16,23 @@ const fadeUp = {
 };
 
 export default function HomePage() {
+  const [elections, setElections] = useState<any[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>({ activeElections: 0, registeredVoters: 0, votesCast: 0, documents: 0 });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [er, ar, sr] = await Promise.all([
+          fetch('/api/elections'), fetch('/api/announcements'), fetch('/api/stats')]);
+        const [ej, aj, sj] = await Promise.all([er.json(), ar.json(), sr.json()]);
+        setElections(ej.data || []);
+        setAnnouncements(aj.data || []);
+        if (sj.data) setStats(sj.data);
+      } catch { /* ignore */ }
+    })();
+  }, []);
+
   const activeElections = elections.filter((e) => e.status === 'active' || e.status === 'upcoming');
 
   return (
@@ -44,14 +61,14 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats */}
+        {/* Stats — live from the database */}
         <section className="govt-section bg-secondary">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatCard icon={Vote} label="Active Elections" value={elections.filter(e => e.status === 'active').length} />
-              <StatCard icon={UserCheck} label="Registered Voters" value="91.2 Cr" />
-              <StatCard icon={Shield} label="Votes Secured" value="2.4 Cr" />
-              <StatCard icon={FileText} label="Documents Published" value={documents.length} />
+              <StatCard icon={Vote} label="Active Elections" value={stats.activeElections} />
+              <StatCard icon={UserCheck} label="Registered Voters" value={stats.registeredVoters} />
+              <StatCard icon={Shield} label="Votes Cast" value={stats.votesCast} />
+              <StatCard icon={FileText} label="Documents Published" value={stats.documents} />
             </div>
           </div>
         </section>
@@ -93,7 +110,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Announcements */}
+        {/* Announcements — live from the database */}
         <section className="govt-section">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-heading font-bold mb-6 flex items-center gap-2">
@@ -115,6 +132,7 @@ export default function HomePage() {
                   </div>
                 </div>
               ))}
+              {announcements.length === 0 && <p className="text-muted-foreground text-sm">No announcements yet.</p>}
             </div>
           </div>
         </section>

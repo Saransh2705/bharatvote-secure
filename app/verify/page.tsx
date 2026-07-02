@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Layout from '@/components/Layout';
+import { setUser } from '@/lib/session';
 
 // @ts-expect-error - Type incompatibility between react-webcam and Next.js dynamic
 const Webcam: any = dynamic(() => import('react-webcam').then(mod => mod.default), { ssr: false });
@@ -18,28 +19,42 @@ type Step = 'epic' | 'face' | 'verifying' | 'success' | 'failed';
 export default function VerifyVote() {
   const [step, setStep] = useState<Step>('epic');
   const [epic, setEpic] = useState('');
+  const [error, setError] = useState('');
   const webcamRef = useRef<any>(null);
   const router = useRouter();
 
-  const startVerification = useCallback(() => {
-    const img = webcamRef.current?.getScreenshot();
-    if (img) {
-      setStep('verifying');
-      // Simulate verification
-      setTimeout(() => {
-        setStep(Math.random() > 0.2 ? 'success' : 'failed');``
-      }, 3000);
+  // Facial capture is illustrative; identity is verified against the database by EPIC.
+  const startVerification = useCallback(async () => {
+    webcamRef.current?.getScreenshot();
+    setStep('verifying');
+    setError('');
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter_id: epic }),
+      });
+      const j = await res.json();
+      if (res.ok && j.found) {
+        setUser({ id: j.data.id, full_name: j.data.full_name, voter_id: j.data.voter_id });
+        setStep('success');
+      } else {
+        setError(j.error || 'No registered voter found for this EPIC.');
+        setStep('failed');
+      }
+    } catch {
+      setError('Verification failed — please try again.');
+      setStep('failed');
     }
-  }, []);
+  }, [epic]);
 
   return (
     <Layout>
       <div className="govt-section">
         <div className="container mx-auto px-4 max-w-lg">
-          <h1 className="text-2xl font-heading font-bold mb-2">Verify & Vote</h1>
+          <h1 className="text-2xl font-heading font-bold mb-2">Verify &amp; Vote</h1>
           <p className="text-muted-foreground mb-6">Verify your identity to proceed to voting</p>
 
-          {/* Progress steps */}
           <div className="flex items-center gap-2 mb-8">
             {['EPIC Number', 'Face Capture', 'Verification'].map((label, i) => {
               const stepIndex = ['epic', 'face', 'verifying'].indexOf(step);
@@ -78,7 +93,7 @@ export default function VerifyVote() {
                 videoConstraints={{ facingMode: 'user' }}
               />
               <Button onClick={startVerification} className="w-full">
-                <Camera className="h-4 w-4 mr-2" /> Capture & Verify
+                <Camera className="h-4 w-4 mr-2" /> Capture &amp; Verify
               </Button>
             </div>
           )}
@@ -93,7 +108,7 @@ export default function VerifyVote() {
                 <Loader2 className="h-16 w-16 text-primary" />
               </motion.div>
               <p className="mt-4 font-semibold">Verifying your identity...</p>
-              <p className="text-sm text-muted-foreground">Please wait while we process your facial data</p>
+              <p className="text-sm text-muted-foreground">Matching your EPIC against the voter roll</p>
             </div>
           )}
 
@@ -112,10 +127,11 @@ export default function VerifyVote() {
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center py-12">
               <XCircle className="h-20 w-20 text-destructive mx-auto mb-4" />
               <h2 className="text-xl font-heading font-bold mb-2">Verification Failed</h2>
-              <p className="text-muted-foreground mb-6">Face mismatch detected. Please try again.</p>
-              <Button onClick={() => setStep('face')} variant="outline">
-                Try Again
-              </Button>
+              <p className="text-muted-foreground mb-6">{error || 'We could not verify this voter. Please register first.'}</p>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => setStep('epic')} variant="outline">Try Again</Button>
+                <Button onClick={() => router.push('/register')}>Register</Button>
+              </div>
             </motion.div>
           )}
         </div>

@@ -1,16 +1,29 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, X } from 'lucide-react';
-import { documents } from '@/lib/mockData';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/Layout';
 
-const categories = ['All', ...Array.from(new Set(documents.map(d => d.category)))];
-
 export default function DocumentsPage() {
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All');
   const [viewDoc, setViewDoc] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/documents');
+        const json = await res.json();
+        setDocuments(json.data || []);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const categories = ['All', ...Array.from(new Set(documents.map(d => d.category)))];
   const filtered = filter === 'All' ? documents : documents.filter(d => d.category === filter);
 
   return (
@@ -34,20 +47,24 @@ export default function DocumentsPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(doc => (
-              <div key={doc.id} className="govt-card p-5">
-                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">{doc.category}</span>
-                <h3 className="font-semibold mt-3 mb-1">{doc.title}</h3>
-                <p className="text-xs text-muted-foreground mb-3">{doc.date}</p>
-                <Button variant="outline" size="sm" onClick={() => setViewDoc(doc.id)}>
-                  <FileText className="h-4 w-4 mr-1" /> View Document
-                </Button>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-muted-foreground py-8">Loading documents…</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtered.map(doc => (
+                <div key={doc.id} className="govt-card p-5">
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">{doc.category}</span>
+                  <h3 className="font-semibold mt-3 mb-1">{doc.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-3">{doc.date}</p>
+                  <Button variant="outline" size="sm" onClick={() => setViewDoc(doc.id)}>
+                    <FileText className="h-4 w-4 mr-1" /> View Document
+                  </Button>
+                </div>
+              ))}
+              {filtered.length === 0 && <p className="text-muted-foreground">No documents found.</p>}
+            </div>
+          )}
 
-          {/* PDF Viewer Modal */}
           {viewDoc && (
             <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-4">
               <div className="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
