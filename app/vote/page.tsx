@@ -1,23 +1,61 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle, Shield } from 'lucide-react';
+import Link from 'next/link';
+import { Lock, CheckCircle, Shield, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CandidateCard from '@/components/CandidateCard';
-import { candidates, elections } from '@/lib/mockData';
 import Layout from '@/components/Layout';
+import { getUser, type BVUser } from '@/lib/session';
 
 type VoteStep = 'select' | 'confirm' | 'done';
 
 export default function VotingPage() {
-  const [selectedElection, setSelectedElection] = useState<string>('2');
+  const [elections, setElections] = useState<any[]>([]);
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [selectedElection, setSelectedElection] = useState<string>('');
   const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null);
   const [voteStep, setVoteStep] = useState<VoteStep>('select');
+  const [confirmationId, setConfirmationId] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState<BVUser | null>(null);
 
-  const activeElections = elections.filter(e => e.status === 'active');
+  useEffect(() => {
+    setUser(getUser());
+    (async () => {
+      try {
+        const [er, cr] = await Promise.all([fetch('/api/elections?status=active'), fetch('/api/candidates')]);
+        const [ej, cj] = await Promise.all([er.json(), cr.json()]);
+        setElections(ej.data || []);
+        setCandidates(cj.data || []);
+        if ((ej.data || []).length) setSelectedElection(ej.data[0].id);
+      } catch { /* ignore */ }
+    })();
+  }, []);
+
   const electionCandidates = candidates.filter(c => c.election_id === selectedElection);
   const chosen = candidates.find(c => c.id === selectedCandidate);
+
+  async function castVote() {
+    if (!user) { setError('Please register before voting.'); setVoteStep('select'); return; }
+    setSubmitting(true); setError('');
+    try {
+      const res = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ election_id: selectedElection, candidate_id: selectedCandidate, voter_id: user.id }),
+      });
+      const j = await res.json();
+      if (!res.ok) { setError(j.error || 'Failed to record vote'); setVoteStep('select'); }
+      else { setConfirmationId(j.data.confirmation_id); setVoteStep('done'); }
+    } catch {
+      setError('Network error — please try again.'); setVoteStep('select');
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (voteStep === 'done') {
     return (
@@ -35,10 +73,11 @@ export default function VotingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">Vote Confirmation ID: BV-2026-{Math.random().toString(36).substr(2, 8).toUpperCase()}</span>
+                <span className="text-sm font-medium">Vote Confirmation ID: {confirmationId}</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground mt-6">Thank you for participating in the democratic process.</p>
+            <Link href="/results" className="inline-block mt-4 text-primary underline text-sm">View live results →</Link>
           </div>
         </div>
       </Layout>
@@ -54,10 +93,11 @@ export default function VotingPage() {
             <div className="govt-card p-6">
               <p className="text-sm text-muted-foreground mb-4">You are about to cast your vote for:</p>
               {chosen && <CandidateCard candidate={chosen} />}
+              {error && <p className="text-sm text-red-600 mt-3 flex items-center gap-1"><AlertCircle className="h-4 w-4" />{error}</p>}
               <div className="mt-6 flex gap-3">
-                <Button variant="outline" onClick={() => setVoteStep('select')} className="flex-1">Go Back</Button>
-                <Button onClick={() => setVoteStep('done')} className="flex-1 bg-green-india hover:bg-green-india/90">
-                  <Lock className="h-4 w-4 mr-2" /> Confirm & Submit
+                <Button variant="outline" onClick={() => setVoteStep('select')} className="flex-1" disabled={submitting}>Go Back</Button>
+                <Button onClick={castVote} disabled={submitting} className="flex-1 bg-green-india hover:bg-green-india/90">
+                  <Lock className="h-4 w-4 mr-2" /> {submitting ? 'Submitting…' : 'Confirm & Submit'}
                 </Button>
               </div>
             </div>
@@ -74,9 +114,16 @@ export default function VotingPage() {
           <h1 className="text-2xl font-heading font-bold mb-2">Cast Your Vote</h1>
           <p className="text-muted-foreground mb-6">Select an election and choose your candidate</p>
 
-          {/* Election selector */}
+          {!user && (
+            <div className="govt-card p-4 mb-6 border-l-4 border-saffron flex items-center justify-between gap-3">
+              <span className="text-sm">You must be a registered voter to cast a vote.</span>
+              <Link href="/register"><Button size="sm">Register</Button></Link>
+            </div>
+          )}
+          {error && <p className="text-sm text-red-600 mb-4 flex items-center gap-1"><AlertCircle className="h-4 w-4" />{error}</p>}
+
           <div className="flex gap-2 mb-6 flex-wrap">
-            {activeElections.map(e => (
+            {elections.map(e => (
               <button
                 key={e.id}
                 onClick={() => { setSelectedElection(e.id); setSelectedCandidate(null); }}
@@ -89,7 +136,6 @@ export default function VotingPage() {
             ))}
           </div>
 
-          {/* Candidates */}
           <div className="space-y-3">
             {electionCandidates.map(c => (
               <CandidateCard
@@ -99,11 +145,14 @@ export default function VotingPage() {
                 onSelect={() => setSelectedCandidate(c.id)}
               />
             ))}
+            {electionCandidates.length === 0 && (
+              <p className="text-center text-muted-foreground py-8">No candidates for this election yet.</p>
+            )}
           </div>
 
           {selectedCandidate && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
-              <Button onClick={() => setVoteStep('confirm')} size="lg" className="w-full">
+              <Button onClick={() => setVoteStep('confirm')} size="lg" className="w-full" disabled={!user}>
                 Proceed to Confirm
               </Button>
             </motion.div>

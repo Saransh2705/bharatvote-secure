@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from 'react';
-import { elections } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
 import ElectionCard from '@/components/ElectionCard';
 import Layout from '@/components/Layout';
 
@@ -9,6 +8,23 @@ const filters = ['all', 'active', 'upcoming', 'completed'] as const;
 
 export default function ElectionsPage() {
   const [filter, setFilter] = useState<string>('all');
+  const [elections, setElections] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/elections');
+        const json = await res.json();
+        setElections(json.data || []);
+      } catch {
+        /* ignore */
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
   const filtered = filter === 'all' ? elections : elections.filter(e => e.status === filter);
 
   return (
@@ -32,11 +48,17 @@ export default function ElectionsPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(e => <ElectionCard key={e.id} election={e} />)}
-          </div>
-          {filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">No elections found for this filter.</p>
+          {loading ? (
+            <p className="text-center text-muted-foreground py-12">Loading elections…</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filtered.map(e => <ElectionCard key={e.id} election={e} />)}
+              </div>
+              {filtered.length === 0 && (
+                <p className="text-center text-muted-foreground py-12">No elections found for this filter.</p>
+              )}
+            </>
           )}
         </div>
       </div>

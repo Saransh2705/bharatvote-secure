@@ -1,19 +1,39 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { candidates, elections } from '@/lib/mockData';
 import CandidateCard from '@/components/CandidateCard';
 import Layout from '@/components/Layout';
 
 const COLORS = ['#1a2a6c', '#FF9933', '#2d8f2d', '#888'];
 
 export default function ResultsPage() {
-  const [selectedElection, setSelectedElection] = useState('2');
-  const completedOrActive = elections.filter(e => e.status === 'completed' || e.status === 'active');
-  const electionCandidates = candidates.filter(c => c.election_id === selectedElection).sort((a, b) => b.votes - a.votes);
-  const totalVotes = electionCandidates.reduce((sum, c) => sum + c.votes, 0);
+  const [elections, setElections] = useState<any[]>([]);
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [selectedElection, setSelectedElection] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const [er, cr] = await Promise.all([fetch('/api/elections'), fetch('/api/candidates')]);
+        const [ej, cj] = await Promise.all([er.json(), cr.json()]);
+        const els = (ej.data || []).filter((e: any) => e.status === 'completed' || e.status === 'active');
+        setElections(els);
+        setCandidates(cj.data || []);
+        if (els.length) setSelectedElection(els[0].id);
+      } catch {
+        /* ignore */
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const electionCandidates = candidates
+    .filter(c => c.election_id === selectedElection)
+    .sort((a, b) => b.votes - a.votes);
+  const totalVotes = electionCandidates.reduce((sum, c) => sum + (c.votes || 0), 0);
   const barData = electionCandidates.map(c => ({ name: c.name.split(' ')[1] || c.name, votes: c.votes }));
   const pieData = electionCandidates.map(c => ({ name: c.party, value: c.votes }));
 
@@ -25,7 +45,7 @@ export default function ResultsPage() {
           <p className="text-muted-foreground mb-6">Real-time vote counts and analytics</p>
 
           <div className="flex gap-2 mb-8 flex-wrap">
-            {completedOrActive.map(e => (
+            {elections.map(e => (
               <button
                 key={e.id}
                 onClick={() => setSelectedElection(e.id)}
@@ -38,9 +58,10 @@ export default function ResultsPage() {
             ))}
           </div>
 
-          {electionCandidates.length > 0 ? (
+          {loading ? (
+            <p className="text-center text-muted-foreground py-12">Loading results…</p>
+          ) : electionCandidates.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Bar chart */}
               <div className="govt-card p-6">
                 <h3 className="font-heading font-semibold mb-4">Vote Count</h3>
                 <ResponsiveContainer width="100%" height={300}>
@@ -54,7 +75,6 @@ export default function ResultsPage() {
                 </ResponsiveContainer>
               </div>
 
-              {/* Pie chart */}
               <div className="govt-card p-6">
                 <h3 className="font-heading font-semibold mb-4">Vote Distribution</h3>
                 <ResponsiveContainer width="100%" height={300}>
@@ -69,7 +89,6 @@ export default function ResultsPage() {
                 </ResponsiveContainer>
               </div>
 
-              {/* Candidate ranking */}
               <div className="lg:col-span-2">
                 <h3 className="font-heading font-semibold mb-4">Candidate Rankings</h3>
                 <div className="space-y-3">
@@ -82,7 +101,7 @@ export default function ResultsPage() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 text-sm text-muted-foreground">Total votes cast: {totalVotes.toLocaleString()} | Turnout: 67.3%</div>
+                <div className="mt-4 text-sm text-muted-foreground">Total votes cast: {totalVotes.toLocaleString()}</div>
               </div>
             </div>
           ) : (
