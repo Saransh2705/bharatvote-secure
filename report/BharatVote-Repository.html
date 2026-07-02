@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Serif+4:wght@400;600&display=swap');
+*{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; box-sizing:border-box; margin:0; }
+@page{ size:A4; margin:0; }
+body{ font-family:'Poppins','Segoe UI',sans-serif; }
+.page{ width:210mm; height:297mm; position:relative; overflow:hidden;
+  background:radial-gradient(120% 80% at 15% 0%, #24347F 0%, #1A2A6C 45%, #12204F 100%); color:#fff;
+  padding:24mm 20mm; display:flex; flex-direction:column; }
+.blob{ position:absolute; border-radius:50%; filter:blur(2px); }
+.b1{ width:130mm; height:130mm; right:-45mm; top:-40mm; background:radial-gradient(circle,#FF9933,transparent 70%); opacity:.5; }
+.b2{ width:95mm; height:95mm; left:-30mm; bottom:-25mm; background:radial-gradient(circle,#138808,transparent 70%); opacity:.45; }
+.uni{ position:relative; font-weight:600; font-size:13pt; letter-spacing:3px; text-transform:uppercase; }
+.uni span{ display:block; font-weight:400; font-size:9.5pt; letter-spacing:2px; opacity:.85; margin-top:3px; }
+.mid{ position:relative; margin-top:14mm; }
+.kicker{ font-weight:500; letter-spacing:4px; font-size:10pt; text-transform:uppercase; color:#FCD9B0; }
+.bar{ width:46mm; height:4px; background:linear-gradient(90deg,#FF9933 0 45%,#fff 45% 55%,#138808 55% 100%); border-radius:3px; margin:7mm 0; }
+h1{ font-size:52pt; font-weight:800; line-height:1; }
+.sub{ font-family:'Source Serif 4',serif; font-size:15pt; margin-top:5mm; color:#DBE3FF; }
+.card{ position:relative; margin-top:12mm; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.30);
+  border-radius:5mm; padding:8mm 9mm; }
+.card .h{ font-weight:600; font-size:12pt; letter-spacing:1px; text-transform:uppercase; color:#FCD9B0; margin-bottom:4mm; }
+.card ul{ list-style:none; }
+.card li{ font-size:12.5pt; padding:2.4mm 0; border-bottom:1px solid rgba(255,255,255,.14); }
+.card li:last-child{ border-bottom:0; }
+.qrrow{ position:relative; margin-top:12mm; display:flex; align-items:center; gap:9mm; }
+.qrbox{ background:#fff; padding:4mm; border-radius:4mm; }
+.qrbox img{ width:42mm; height:42mm; display:block; }
+.linkwrap .l1{ font-size:10pt; color:#FCD9B0; letter-spacing:2px; text-transform:uppercase; }
+.linkwrap .l2{ font-size:16pt; font-weight:600; margin-top:2mm; word-break:break-all; }
+.linkwrap .l3{ font-size:9.5pt; color:#C7D2FE; margin-top:2mm; }
+.foot{ position:relative; margin-top:auto; padding-top:8mm; border-top:1px solid rgba(255,255,255,.2);
+  font-size:10.5pt; color:#DBE3FF; }
+.foot b{ color:#fff; }
+</style></head><body>
+<div class="page">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="uni">Chandigarh University<span>University Institute of Computing · Department of Computer Applications</span></div>
+  <div class="mid">
+    <div class="kicker">Project Repository</div>
+    <div class="bar"></div>
+    <h1>BharatVote</h1>
+    <div class="sub">A Secure Digital Voting Platform for the Indian Election System</div>
+  </div>
+  <div class="card">
+    <div class="h">This repository contains the complete project</div>
+    <ul>
+      <li>🖥️ &nbsp;<b>Frontend</b> — Next.js 15 web application (all pages &amp; components)</li>
+      <li>⚙️ &nbsp;<b>Backend</b> — Next.js API routes <i>and</i> a standalone Express service (<code>backend/</code>)</li>
+      <li>🗄️ &nbsp;<b>Database</b> — Supabase schema, RLS policies &amp; seed (SQL migration)</li>
+      <li>📄 &nbsp;<b>Project Report (PDF)</b> — 50-page report in <code>report/</code></li>
+      <li>📊 &nbsp;<b>Presentation Deck (PPTX)</b> — 17-slide deck in <code>report/</code></li>
+    </ul>
+  </div>
+  <div class="qrrow">
+    <div class="qrbox"><img src="data:image/png;base64,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"/></div>
+    <div class="linkwrap">
+      <div class="l1">GitHub Repository</div>
+      <div class="l2">github.com/Saransh2705/bharatvote-secure</div>
+      <div class="l3">Scan the QR code or open the link above · Public repository</div>
+    </div>
+  </div>
+  <div class="foot"><b>Saransh Kumar</b> &nbsp;·&nbsp; UID 023BCA110194 &nbsp;·&nbsp; BCA-V2 &nbsp;·&nbsp; Chandigarh University, 2023–2026 &nbsp;·&nbsp; Mentor: <b>Sahil Jindal</b> (Quollabb)</div>
+</div>
+</body></html>
