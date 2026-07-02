@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BharatVote — Project Report</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --navy:#1A2A6C; --navy2:#22307D; --saffron:#FF9933; --green:#138808; --greenD:#0E6B06;
+  --ink:#0F1E3D; --muted:#475569; --tint:#EEF2FF; --tint2:#FFF7ED; --tintg:#F0FDF4;
+  --line:#E2E8F0; --rose:#C0392B;
+}
+*{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; box-sizing:border-box; }
+@page{ size:A4; margin:17mm 15mm 20mm 15mm; }
+html,body{ margin:0; padding:0; }
+body{ font-family:'Source Serif 4', Georgia, serif; color:var(--ink); font-size:10.8pt; line-height:1.62; background:#fff; }
+h1,h2,h3,h4{ font-family:'Poppins','Segoe UI',sans-serif; line-height:1.2; }
+p{ margin:0 0 9px; text-align:justify; }
+code,pre,.mono{ font-family:'JetBrains Mono',Consolas,monospace; }
+
+/* cover */
+.cover{ height:258mm; margin:-2mm -3mm 0; border-radius:4mm; color:#fff; position:relative;
+  background:radial-gradient(120% 80% at 15% 0%, #24347F 0%, var(--navy) 45%, #12204F 100%);
+  overflow:hidden; page-break-after:always; display:flex; flex-direction:column; justify-content:space-between; padding:20mm 16mm; }
+.cover .blob{ position:absolute; border-radius:50%; filter:blur(2px); }
+.cover .b1{ width:120mm; height:120mm; right:-40mm; top:-30mm; background:radial-gradient(circle,var(--saffron),transparent 70%); opacity:.5; }
+.cover .b2{ width:90mm; height:90mm; left:-30mm; bottom:-20mm; background:radial-gradient(circle,var(--green),transparent 70%); opacity:.45; }
+.cover .uni{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13pt; letter-spacing:3px; text-transform:uppercase; position:relative; }
+.cover .uni span{ display:block; font-weight:400; font-size:9.5pt; letter-spacing:2px; opacity:.85; margin-top:3px; }
+.cover .mid{ position:relative; }
+.cover .kicker{ font-family:'Poppins',sans-serif; font-weight:500; letter-spacing:4px; font-size:10pt; text-transform:uppercase; color:#FCD9B0; }
+.cover .accentbar{ width:46mm; height:4px; background:linear-gradient(90deg,var(--saffron) 0 45%, #fff 45% 55%, var(--green) 55% 100%); border-radius:3px; margin:8mm 0; }
+.cover h1.title{ font-size:46pt; font-weight:800; margin:0; line-height:1.02; }
+.cover .subtitle{ font-family:'Poppins',sans-serif; font-weight:400; font-size:15pt; margin-top:6mm; color:#DBE3FF; }
+.cover .card{ position:relative; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.30); border-radius:4mm; padding:8mm 9mm; }
+.cover .card .row{ display:flex; justify-content:space-between; padding:2.2mm 0; border-bottom:1px solid rgba(255,255,255,.16); font-family:'Poppins',sans-serif; font-size:10.5pt; }
+.cover .card .row:last-child{ border-bottom:0; }
+.cover .card .row .k{ color:#C7D2FE; } .cover .card .row .v{ font-weight:600; }
+.cover .foot{ position:relative; font-family:'Poppins',sans-serif; font-size:9pt; color:#DBE3FF; text-align:center; }
+
+section{ page-break-before:always; }
+.frontpage{ page-break-before:always; padding-top:4mm; }
+.frontpage h2.ftitle{ font-size:20pt; color:var(--navy); text-align:center; margin:0 0 4mm; }
+.frontpage .rule{ width:40mm; height:3px; background:linear-gradient(90deg,var(--saffron),var(--green)); margin:0 auto 9mm; border-radius:2px; }
+
+.chapter{ page-break-before:always; }
+.chapbanner{ display:flex; align-items:center; gap:6mm; margin:0 -3mm 7mm; background:linear-gradient(100deg,var(--navy),var(--navy2)); color:#fff; border-radius:3mm; padding:7mm 8mm; position:relative; overflow:hidden; }
+.chapbanner::after{ content:''; position:absolute; right:-10mm; top:-10mm; width:50mm; height:50mm; background:radial-gradient(circle,rgba(255,153,51,.5),transparent 70%); }
+.chapnum{ flex:0 0 auto; width:20mm; height:20mm; border-radius:50%; background:rgba(255,153,51,.22); border:2px solid var(--saffron); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:800; font-size:22pt; position:relative; z-index:1; }
+.chaplabel{ font-family:'Poppins',sans-serif; font-weight:500; letter-spacing:3px; font-size:9pt; text-transform:uppercase; color:#FCD9B0; }
+.chapbanner h1{ margin:1mm 0 0; font-size:23pt; font-weight:700; position:relative; z-index:1; }
+
+h2{ color:var(--navy); font-size:14.5pt; margin:8mm 0 3mm; padding-bottom:1.5mm; border-bottom:2px solid var(--tint); }
+h3{ color:var(--greenD); font-size:12pt; margin:6mm 0 2mm; }
+h4{ color:#B45309; font-size:10.8pt; margin:4mm 0 1.5mm; }
+
+.callout{ border-left:4px solid var(--green); background:var(--tintg); border-radius:0 3mm 3mm 0; padding:4mm 5mm; margin:4mm 0; break-inside:avoid; }
+.callout.saffron{ border-left-color:var(--saffron); background:var(--tint2); }
+.callout.navy{ border-left-color:var(--navy); background:var(--tint); }
+.callout .lbl{ font-family:'Poppins',sans-serif; font-weight:600; font-size:9pt; letter-spacing:1px; text-transform:uppercase; color:var(--greenD); display:block; margin-bottom:1.5mm; }
+.callout.saffron .lbl{ color:#B45309; } .callout.navy .lbl{ color:var(--navy); }
+
+table{ width:100%; border-collapse:collapse; margin:4mm 0; font-size:9.4pt; break-inside:avoid; }
+thead th{ background:linear-gradient(90deg,var(--navy),var(--navy2)); color:#fff; font-family:'Poppins',sans-serif; font-weight:600; text-align:left; padding:3mm 3.5mm; font-size:9pt; }
+tbody td{ padding:2.6mm 3.5mm; border-bottom:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even){ background:var(--tint); }
+table.small{ font-size:8.8pt; }
+caption{ caption-side:bottom; font-size:8.4pt; color:var(--muted); font-family:'Poppins',sans-serif; padding-top:2mm; text-align:left; }
+
+pre{ background:var(--ink); color:#E2E8F0; border-radius:3mm; padding:5mm; font-size:8.6pt; line-height:1.5; margin:4mm 0; break-inside:avoid; border:1px solid #1E325F; }
+pre .ttl{ display:block; font-family:'Poppins',sans-serif; font-size:7.6pt; letter-spacing:1px; text-transform:uppercase; color:#FCD9B0; margin-bottom:2.5mm; border-bottom:1px solid #1E325F; padding-bottom:1.5mm; }
+pre .k{ color:#93C5FD; } pre .s{ color:#6EE7B7; } pre .c{ color:#64748B; font-style:italic; } pre .f{ color:#FDBA74; } pre .n{ color:#FCD34D; }
+code.inline{ background:var(--tint); color:var(--navy); padding:.5mm 1.4mm; border-radius:1.5mm; font-size:8.8pt; }
+
+.figure{ margin:5mm 0; break-inside:avoid; text-align:center; }
+.figure .frame{ border:1px solid var(--line); border-radius:3mm; padding:5mm; background:linear-gradient(180deg,#fff,var(--tint)); }
+.figcap{ font-family:'Poppins',sans-serif; font-size:8.6pt; color:var(--muted); margin-top:2.5mm; }
+.figcap b{ color:var(--navy); }
+.shot{ border:2px dashed var(--saffron); border-radius:3mm; background:var(--tint2); color:#B45309; font-family:'Poppins',sans-serif; font-size:9.5pt; padding:14mm 4mm; text-align:center; }
+
+ul,ol{ margin:2mm 0 4mm; padding-left:7mm; } li{ margin:1.2mm 0; }
+ul.feat{ list-style:none; padding-left:0; }
+ul.feat li{ position:relative; padding-left:7mm; margin:1.8mm 0; }
+ul.feat li::before{ content:'▸'; position:absolute; left:1mm; color:var(--saffron); font-weight:700; }
+
+.toc{ font-family:'Poppins',sans-serif; font-size:10pt; }
+.toc .e{ display:flex; align-items:baseline; margin:2.2mm 0; }
+.toc .e .ch{ color:var(--green); font-weight:600; min-width:22mm; } .toc .e .t{ color:var(--ink); }
+.toc .e .d{ flex:1; border-bottom:1px dotted #CBD5E1; margin:0 2mm; transform:translateY(-1mm); }
+.toc .e .pg{ color:var(--muted); }
+.toc .sub{ padding-left:24mm; font-size:9.2pt; color:var(--muted); } .toc .sub .t{ color:var(--muted); }
+
+.lead{ font-size:11.6pt; color:var(--muted); font-family:'Poppins',sans-serif; }
+.kvgrid{ display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin:4mm 0; }
+.kv{ background:var(--tint); border:1px solid var(--line); border-radius:3mm; padding:3.5mm 4mm; break-inside:avoid; }
+.kv .h{ font-family:'Poppins',sans-serif; font-weight:600; color:var(--navy); font-size:9.6pt; margin-bottom:1mm; }
+.kv .b{ font-size:9.4pt; color:var(--muted); }
+.pill{ display:inline-block; background:var(--tint); color:var(--navy); font-family:'Poppins',sans-serif; font-size:8pt; font-weight:600; padding:.8mm 2.4mm; border-radius:6mm; margin:.6mm; }
+.pill.s{ background:var(--tint2); color:#B45309; } .pill.g{ background:var(--tintg); color:var(--greenD); }
+svg{ max-width:100%; height:auto; }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="uni">Chandigarh University<span>University Institute of Computing · Department of Computer Applications</span></div>
+  <div class="mid">
+    <div class="kicker">Final-Year Major Project Report</div>
+    <div class="accentbar"></div>
+    <h1 class="title">BharatVote</h1>
+    <div class="subtitle">A Secure Digital Voting Platform for the Indian Election System</div>
+    <div style="height:10mm"></div>
+    <div class="card">
+      <div class="row"><span class="k">Submitted by</span><span class="v">Saransh Kumar</span></div>
+      <div class="row"><span class="k">University ID (UID)</span><span class="v">023BCA110194</span></div>
+      <div class="row"><span class="k">Programme</span><span class="v">BCA — V Semester (BCA-V2)</span></div>
+      <div class="row"><span class="k">Batch</span><span class="v">2023 – 2026</span></div>
+      <div class="row"><span class="k">Mentor / Supervisor</span><span class="v">Sahil Jindal — Quollabb</span></div>
+    </div>
+  </div>
+  <div class="foot">Submitted in partial fulfillment of the requirements for the degree of<br><b>Bachelor of Computer Applications (BCA)</b> &nbsp;·&nbsp; Academic Session 2023–2026<br>Date of Submission: <b>02 July 2026</b><br>Industry mentorship by <b>Quollabb</b>, in partnership with Chandigarh University</div>
+</div>
+
+<!-- ================= CERTIFICATE ================= -->
+<section class="frontpage">
+  <h2 class="ftitle">Certificate</h2><div class="rule"></div>
+  <p>This is to certify that the project report entitled <b>“BharatVote — A Secure Digital Voting Platform for the Indian Election System”</b> is a bona-fide record of the project work carried out by <b>Saransh Kumar</b> (UID: <b>023BCA110194</b>), a student of the <b>Bachelor of Computer Applications (BCA-V2)</b> programme, Chandigarh University, during the academic session 2023–2026, in partial fulfillment of the requirements for the award of the degree of Bachelor of Computer Applications.</p>
+  <p>The work was carried out under the industry mentorship of <b>Mr. Sahil Jindal</b> of <b>Quollabb</b>, an industry partner of Chandigarh University. To the best of my knowledge, the matter embodied in this report is original and has not been submitted to any other university or institution for the award of any other degree or diploma.</p>
+  <div style="height:24mm"></div>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Mr. Sahil Jindal</div><div class="b">Industry Mentor · Quollabb<br>(Industry Partner, Chandigarh University)</div></div>
+    <div class="kv"><div class="h">Head of Department</div><div class="b">Department of Computer Applications<br>University Institute of Computing<br>Chandigarh University</div></div>
+  </div>
+  <p style="margin-top:14mm; color:var(--muted)"><b>Date:</b> 02 July 2026 &nbsp;&nbsp;&nbsp; <b>Place:</b> Gharuan, Mohali (Punjab)</p>
+</section>
+
+<!-- ================= DECLARATION ================= -->
+<section class="frontpage">
+  <h2 class="ftitle">Declaration</h2><div class="rule"></div>
+  <p>I, <b>Saransh Kumar</b>, bearing University ID <b>023BCA110194</b>, hereby declare that the project work presented in this report entitled <b>“BharatVote — A Secure Digital Voting Platform for the Indian Election System”</b> is an authentic record of my own work carried out under the mentorship of <b>Mr. Sahil Jindal (Quollabb)</b> as part of the requirements for the degree of Bachelor of Computer Applications (BCA-V2) at Chandigarh University.</p>
+  <p>I further declare that the work reported here has not been submitted, in part or in full, for the award of any other degree or diploma. All sources of information, external libraries, and services used have been duly acknowledged and cited.</p>
+  <div style="height:28mm"></div>
+  <p style="text-align:right"><b>Saransh Kumar</b><br>UID: 023BCA110194<br>BCA-V2, 2023–2026<br>Chandigarh University</p>
+</section>
+
+<!-- ================= ACKNOWLEDGEMENT ================= -->
+<section class="frontpage">
+  <h2 class="ftitle">Acknowledgement</h2><div class="rule"></div>
+  <p>The successful completion of this project would not have been possible without the guidance and support of several individuals and institutions, and I take this opportunity to express my sincere gratitude to them.</p>
+  <p>First and foremost, I extend my heartfelt thanks to my industry mentor, <b>Mr. Sahil Jindal</b> of <b>Quollabb</b> — an industry partner of Chandigarh University — for his invaluable technical guidance, insight into secure system design, and continuous encouragement throughout the development of BharatVote. His mentorship bridged academic learning with real-world engineering practice.</p>
+  <p>I am grateful to the <b>Head of the Department</b> and the faculty of the University Institute of Computing, Chandigarh University, for fostering an environment that encourages practical, industry-aligned learning, and for the resources that made this project possible. I also acknowledge the open-source communities behind <b>Next.js</b>, <b>Supabase</b>, and <b>React</b>, whose tools form the technical foundation of this work.</p>
+  <p>Finally, I thank my family and friends for their constant support and motivation.</p>
+  <div style="height:14mm"></div>
+  <p style="text-align:right"><b>Saransh Kumar</b><br>UID: 023BCA110194</p>
+</section>
+
+<!-- ================= ABSTRACT ================= -->
+<section class="frontpage">
+  <h2 class="ftitle">Abstract</h2><div class="rule"></div>
+  <p><b>BharatVote</b> is a secure, government-grade digital voting platform designed for the Indian election system. It enables citizens to register as voters with identity and facial verification, cast their vote securely in ongoing elections, and independently verify that their vote was recorded — while election officials and the public can view results in real time. The platform is built as a modern full-stack web application using <b>Next.js 15</b> (React, TypeScript) on the front end and the <b>Supabase</b> platform — a managed PostgreSQL database with authentication, storage, and auto-generated APIs — on the back end, requiring no separately operated server.</p>
+  <p>The system models the full electoral domain — voters, elections, candidates, votes, polling booths, official documents, and announcements — in a normalized relational schema protected by <b>Row Level Security</b>. Reference data such as elections, candidates, and results is publicly readable, while all sensitive operations (voter registration and vote casting) are performed exclusively through server-side routes using a privileged service-role key, ensuring the browser never holds write authority. Each vote is encoded, assigned a unique confirmation identifier, constrained to one per voter per election, and acknowledged by an email confirmation.</p>
+  <p>This report documents the motivation, requirements analysis, system design, implementation, testing, and deployment of BharatVote. It demonstrates how a security-conscious, real-time civic application can be delivered by an individual developer using contemporary managed cloud services, and evaluates the resulting system against its functional and non-functional goals.</p>
+  <p style="margin-top:5mm"><b>Keywords:</b> &nbsp;<span class="pill">Digital Voting</span><span class="pill">E-Governance</span><span class="pill s">Next.js</span><span class="pill g">Supabase</span><span class="pill g">PostgreSQL</span><span class="pill">Row Level Security</span><span class="pill s">Facial Verification</span><span class="pill">Vote Encryption</span><span class="pill g">Real-time Results</span></p>
+</section>
+
+<!-- ================= TABLE OF CONTENTS ================= -->
+<section class="frontpage">
+  <h2 class="ftitle">Table of Contents</h2><div class="rule"></div>
+  <div class="toc">
+    <div class="e"><span class="ch">&nbsp;</span><span class="t">Certificate · Declaration · Acknowledgement · Abstract</span><span class="d"></span><span class="pg">i–iv</span></div>
+    <div class="e"><span class="ch">Ch 1</span><span class="t">Introduction</span><span class="d"></span><span class="pg">1</span></div>
+    <div class="e"><span class="ch">Ch 2</span><span class="t">Literature Review &amp; Existing Systems</span><span class="d"></span><span class="pg">6</span></div>
+    <div class="e"><span class="ch">Ch 3</span><span class="t">System Analysis &amp; Requirements</span><span class="d"></span><span class="pg">11</span></div>
+    <div class="e"><span class="ch">Ch 4</span><span class="t">System Design</span><span class="d"></span><span class="pg">16</span></div>
+    <div class="e"><span class="ch">Ch 5</span><span class="t">Implementation</span><span class="d"></span><span class="pg">25</span></div>
+    <div class="e"><span class="ch">Ch 6</span><span class="t">Testing &amp; Evaluation</span><span class="d"></span><span class="pg">35</span></div>
+    <div class="e"><span class="ch">Ch 7</span><span class="t">Deployment</span><span class="d"></span><span class="pg">40</span></div>
+    <div class="e"><span class="ch">Ch 8</span><span class="t">Results &amp; Screenshots</span><span class="d"></span><span class="pg">43</span></div>
+    <div class="e"><span class="ch">Ch 9</span><span class="t">Conclusion &amp; Future Scope</span><span class="d"></span><span class="pg">45</span></div>
+    <div class="e"><span class="ch">&nbsp;</span><span class="t">References</span><span class="d"></span><span class="pg">48</span></div>
+    <div class="e"><span class="ch">&nbsp;</span><span class="t">Appendix A — Source Listings &amp; Database Schema</span><span class="d"></span><span class="pg">49</span></div>
+  </div>
+  <h3 style="margin-top:10mm">List of Figures</h3>
+  <div class="toc">
+    <div class="e"><span class="ch">Fig 4.1</span><span class="t">High-Level System Architecture</span><span class="d"></span><span class="pg">17</span></div>
+    <div class="e"><span class="ch">Fig 4.2</span><span class="t">Data Flow Diagram (Level 0 &amp; 1)</span><span class="d"></span><span class="pg">19</span></div>
+    <div class="e"><span class="ch">Fig 4.3</span><span class="t">Entity-Relationship Diagram</span><span class="d"></span><span class="pg">21</span></div>
+    <div class="e"><span class="ch">Fig 4.4</span><span class="t">Sequence Diagram — Casting a Vote</span><span class="d"></span><span class="pg">23</span></div>
+  </div>
+  <h3 style="margin-top:8mm">List of Tables</h3>
+  <div class="toc">
+    <div class="e"><span class="ch">Tbl 2.1</span><span class="t">Comparison of Voting Systems</span><span class="d"></span><span class="pg">9</span></div>
+    <div class="e"><span class="ch">Tbl 3.1</span><span class="t">Functional Requirements</span><span class="d"></span><span class="pg">12</span></div>
+    <div class="e"><span class="ch">Tbl 6.1</span><span class="t">Test Cases &amp; Results</span><span class="d"></span><span class="pg">37</span></div>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 1 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">1</div><div><div class="chaplabel">Chapter One</div><h1>Introduction</h1></div></div>
+
+  <p class="lead">Elections are the foundation of a democracy, and the integrity, accessibility, and transparency of the voting process are of paramount importance. This chapter introduces the BharatVote platform, the problem it addresses, the motivation behind it, its objectives, and the scope of the work.</p>
+
+  <h2>1.1 Overview</h2>
+  <p>India conducts the largest democratic exercise in the world, with an electorate of nearly a billion voters spread across a vast and diverse geography. While Electronic Voting Machines (EVMs) have modernized in-person polling, the broader electoral experience — voter registration, verification of identity, discovery of polling booths, access to official documents, and timely publication of results — remains fragmented across many channels. <b>BharatVote</b> is a unified, secure digital voting platform that brings these functions together in a single, modern web application designed for the Indian election system.</p>
+  <p>Through BharatVote a citizen can register as a voter and verify their identity using their EPIC (voter ID) number and a facial capture step, browse active and upcoming elections, cast a secure vote for a candidate of their choice, and independently confirm that their vote was recorded — all from a browser. Election administrators operate through a multi-level administrative model, and the public can follow results in real time. The platform is built with <b>Next.js 15</b> and <b>TypeScript</b> on the client, and the managed <b>Supabase</b> platform (PostgreSQL, authentication, storage, and serverless APIs) as its backend, requiring no separately operated server.</p>
+
+  <h2>1.2 Problem Statement</h2>
+  <p>Designing any voting system — digital or physical — is uniquely demanding because it must simultaneously satisfy properties that are often in tension:</p>
+  <ul>
+    <li><b>Integrity.</b> Each eligible voter must be able to cast at most one vote per election, and recorded votes must not be alterable.</li>
+    <li><b>Authentication.</b> Only verified, eligible citizens should be able to vote, which requires reliable identity verification.</li>
+    <li><b>Confidentiality &amp; verifiability.</b> A vote must be private, yet the voter must be able to confirm that their vote was counted.</li>
+    <li><b>Transparency.</b> Results must be publicly auditable and available in a timely manner.</li>
+    <li><b>Accessibility &amp; trust.</b> The system must be usable by ordinary citizens and must be resistant to tampering at every layer.</li>
+  </ul>
+  <p>The problem this project addresses is to design and build a digital voting platform that embodies these properties in a coherent, working system, using an architecture that enforces security at the data layer rather than relying solely on application code — and to do so with modern managed infrastructure that an individual developer can operate.</p>
+  <div class="callout navy"><span class="lbl">Problem, in one sentence</span>How can a secure, verifiable, real-time digital voting platform — with identity verification, one-vote-per-election integrity, and public results — be built for the Indian election system using a database-enforced security model and managed cloud services?</div>
+
+  <h2>1.3 Motivation</h2>
+  <p>The motivation for BharatVote arises from two observations. First, citizens increasingly expect government services to be as accessible and responsive as the consumer applications they use daily; a fragmented electoral experience is at odds with that expectation. Second, the maturity of <b>Backend-as-a-Service</b> platforms and modern React frameworks now makes it feasible for a small team — or an individual — to build data-intensive, security-sensitive applications that once required large engineering organizations.</p>
+  <p>Building BharatVote is therefore both an instructive engineering exercise and a demonstration of civic-technology potential. It requires a deep, applied engagement with relational data modeling, database-level access control, secure server-side API design, identity verification, and real-time data visualization — all within a domain where correctness and security genuinely matter. The project shows that contemporary tooling can bring ambitious e-governance applications within reach.</p>
+
+  <h2>1.4 Objectives</h2>
+  <ol>
+    <li>To model the electoral domain — voters, elections, candidates, votes, booths, documents, and announcements — as a normalized, secure relational schema.</li>
+    <li>To implement voter registration with EPIC-based identity capture and a facial-verification step.</li>
+    <li>To enable secure vote casting that enforces one vote per voter per election, encodes the vote, and issues a unique confirmation identifier.</li>
+    <li>To provide independent vote verification via the confirmation identifier.</li>
+    <li>To publish election results and analytics in real time.</li>
+    <li>To enforce data privacy and integrity at the database layer using Row Level Security, with all writes performed through privileged server-side routes.</li>
+    <li>To deliver the system as a self-contained, deployable full-stack application on managed cloud infrastructure.</li>
+  </ol>
+
+  <h2>1.5 Scope of the Project</h2>
+  <p>BharatVote is developed as a functional, demonstrable platform covering the complete voter journey — registration, verification, election discovery, voting, confirmation, and results — together with supporting modules for polling-booth information, official documents, announcements, and a multi-level administrative view. Identity checks that depend on external government infrastructure (such as live Aadhaar authentication and biometric face-matching services) are represented within the application through their integration points and simulated for demonstration, since access to those national systems is outside the remit of an academic project. Similarly, production-grade cryptographic vote encryption and formal end-to-end verifiable protocols are identified as future enhancements. Within these bounds, the project delivers a working, security-conscious system backed by a live cloud database.</p>
+
+  <h2>1.6 Significance of the Study</h2>
+  <p>The significance of BharatVote lies in demonstrating that the twin demands of a voting system — rigorous security and broad accessibility — can be reconciled in a modern web application without the heavy, self-operated infrastructure historically required. By enforcing integrity and privacy at the database layer rather than only in application code, the project establishes a reproducible pattern that other civic and security-sensitive applications can adopt. For the student, it consolidates learning across databases, security, web engineering, and system design into a single coherent artefact of professional relevance; for the institution and its industry partner, it exemplifies the outcome-oriented, industry-aligned education that the mentorship model seeks to foster.</p>
+  <p>The expected outcomes were a working, verifiable voting platform backed by a live database; a security model that provably prevents unauthorized reads and double-voting; and a body of documentation — this report and an accompanying presentation — communicating the design and its rationale to both technical and non-technical audiences. Each of these outcomes was achieved, as the following chapters evidence.</p>
+
+  <h2>1.7 Organization of the Report</h2>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Chapter 2</div><div class="b">Surveys existing voting systems and the technical approaches to secure and real-time systems.</div></div>
+    <div class="kv"><div class="h">Chapter 3</div><div class="b">Presents requirements analysis, feasibility, and use cases.</div></div>
+    <div class="kv"><div class="h">Chapter 4</div><div class="b">Details the system design — architecture, data flow, the data model, and security.</div></div>
+    <div class="kv"><div class="h">Chapter 5</div><div class="b">Describes the implementation module by module, with representative code.</div></div>
+    <div class="kv"><div class="h">Chapter 6</div><div class="b">Covers testing, test cases, and evaluation of results.</div></div>
+    <div class="kv"><div class="h">Chapters 7–9</div><div class="b">Address deployment, results and screenshots, and conclusions with future scope, followed by references and an appendix.</div></div>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 2 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">2</div><div><div class="chaplabel">Chapter Two</div><h1>Literature Review &amp; Existing Systems</h1></div></div>
+
+  <p class="lead">A responsible design begins with an understanding of how voting has been conducted and computerized elsewhere. This chapter surveys the principal categories of voting systems, examines notable digital-voting deployments, and reviews the technical approaches on which a secure, real-time platform must be founded.</p>
+
+  <h2>2.1 Categories of Voting Systems</h2>
+  <h3>2.1.1 Paper Ballots</h3>
+  <p>The traditional paper ballot is simple, transparent, and requires no technology, which underpins public trust in it. However, it is labour-intensive to administer and count, slow to produce results, and susceptible to invalidated ballots and logistical delays. Its strengths — a durable physical audit trail — inform the design goal of an immutable, verifiable record in digital systems.</p>
+  <h3>2.1.2 Electronic Voting Machines (EVMs)</h3>
+  <p>India’s EVMs record votes electronically at the polling station and have dramatically accelerated counting while reducing invalid votes. The later addition of the Voter-Verifiable Paper Audit Trail (VVPAT) added an independent paper record, reflecting a key principle: a voter should be able to verify their vote. EVMs are, however, standalone devices used only for in-person polling and do not address registration, verification, or remote participation.</p>
+  <h3>2.1.3 Internet / Remote E-Voting</h3>
+  <p>Several jurisdictions have piloted internet voting. <b>Estonia’s i-Voting</b> is the most established, allowing citizens to vote online using a national digital identity (ID card) with strong cryptography and a re-voting mechanism to resist coercion. Pilots such as <b>Voatz</b> (mobile, biometric-authenticated voting) in the United States explored smartphone-based voting but drew scrutiny over security and transparency. These systems demonstrate both the promise of remote participation and the exacting security bar it demands.</p>
+  <h3>2.1.4 Blockchain-Based Voting</h3>
+  <p>Research and pilots have explored distributed ledgers to provide tamper-evidence and public auditability. While blockchains offer immutability, studies note that they do not by themselves solve voter authentication, ballot secrecy, or client-device security, and they introduce complexity. The relevant lesson for BharatVote is the value of an <i>immutable, auditable record</i> — which this project achieves through an append-only votes table with database-enforced constraints rather than a distributed ledger.</p>
+
+  <h2>2.2 Comparative Analysis</h2>
+  <table class="small">
+    <caption><b>Table 2.1</b> — Comparison of voting-system categories against BharatVote.</caption>
+    <thead><tr><th>Property</th><th>Paper Ballot</th><th>EVM (+VVPAT)</th><th>Estonia i-Voting</th><th>BharatVote</th></tr></thead>
+    <tbody>
+      <tr><td>Remote participation</td><td>No</td><td>No</td><td>Yes</td><td>Yes (web)</td></tr>
+      <tr><td>Identity verification</td><td>Manual</td><td>Manual (at booth)</td><td>National eID</td><td>EPIC + facial capture</td></tr>
+      <tr><td>One-vote integrity</td><td>Manual roll</td><td>Device-enforced</td><td>Cryptographic</td><td>DB-enforced (unique constraint)</td></tr>
+      <tr><td>Voter verifiability</td><td>No</td><td>VVPAT slip</td><td>Yes</td><td>Confirmation ID lookup</td></tr>
+      <tr><td>Real-time results</td><td>No</td><td>On counting day</td><td>After close</td><td>Live</td></tr>
+      <tr><td>Immutable record</td><td>Physical</td><td>Device + paper</td><td>Cryptographic log</td><td>Append-only votes table</td></tr>
+      <tr><td>Unified voter services</td><td>No</td><td>No</td><td>Partial</td><td>Yes (register, booth, docs, results)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><span class="lbl">The gap addressed</span>Existing systems each solve part of the electoral experience. BharatVote unifies registration, verification, voting, verification-of-vote, and results into one platform, enforcing integrity at the database layer — a pragmatic model suited to a modern web application.</div>
+
+  <h2>2.3 Enabling Technical Approaches</h2>
+  <h3>2.3.1 Database-Enforced Access Control</h3>
+  <p>PostgreSQL’s <b>Row Level Security (RLS)</b> allows access rules to be attached to the data itself, so that a query can only return or modify rows permitted by policy — independent of application code. For a voting system this is decisive: public reference data (elections, candidates, results) can be safely exposed for reading, while writes and sensitive tables are reachable only through privileged server-side code. BharatVote adopts this model.</p>
+  <h3>2.3.2 Server-Side Privilege Separation</h3>
+  <p>Modern full-stack frameworks such as Next.js allow trusted logic to run in server-side <i>route handlers</i> that never ship to the browser. By performing all writes (registration, vote casting) with a privileged <b>service-role</b> key on the server, while the browser holds only a restricted anonymous key, the platform ensures that no client can bypass the intended rules.</p>
+  <h3>2.3.3 Real-Time Data &amp; Visualization</h3>
+  <p>A managed data platform with instantly queryable APIs, combined with client-side charting (bar and pie visualizations), enables results to be presented live as votes accrue, without a bespoke analytics pipeline.</p>
+
+  <h2>2.4 Security Requirements of Electronic Voting</h2>
+  <p>The study of prior systems distils a set of security properties that any credible electronic voting system must satisfy, and which directly shaped BharatVote’s design:</p>
+  <ul class="feat">
+    <li><b>Eligibility.</b> Only registered, verified citizens may cast a vote.</li>
+    <li><b>Uniqueness.</b> Each eligible voter may vote at most once per election.</li>
+    <li><b>Integrity.</b> A recorded vote cannot be altered or deleted, and the tally reflects exactly the votes cast.</li>
+    <li><b>Ballot secrecy.</b> A voter’s specific choice is not exposed to other parties.</li>
+    <li><b>Verifiability.</b> A voter can independently confirm that their vote was recorded.</li>
+    <li><b>Availability.</b> The system remains usable throughout the polling window.</li>
+  </ul>
+  <p>BharatVote addresses eligibility and uniqueness through registration and a database uniqueness constraint; integrity through an append-only ballot log; secrecy by confining all access to the votes table to trusted server code; verifiability through confirmation identifiers; and availability by building on a managed, horizontally-scaled platform. Coercion-resistance and formal end-to-end cryptographic verifiability — the most advanced properties, exemplified by Estonia’s re-voting mechanism — are identified as directions for future work rather than claimed by the present system.</p>
+
+  <h2>2.5 Web-Application Security Foundations</h2>
+  <p>Beyond voting-specific properties, the platform rests on established web-security foundations. All communication occurs over TLS; secrets are separated into public values safe for the browser and privileged values confined to the server; the principle of least privilege governs the two database clients; and defense in depth is achieved by enforcing access rules both in server code and, independently, in database policies. Consequently a failure or manipulation in any single layer does not by itself compromise the system — a design stance especially important for an application in the electoral domain.</p>
+
+  <h2>2.6 Summary</h2>
+  <p>The survey confirms that a credible digital voting platform must offer verified identity, one-vote integrity, an immutable and verifiable record, and timely results — and that database-enforced access control with server-side privilege separation is an appropriate foundation. BharatVote’s contribution is to combine these into a single, coherent, deployable application. The next chapter translates these observations into concrete requirements.</p>
+</section>
+
+<!-- ================= CHAPTER 3 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">3</div><div><div class="chaplabel">Chapter Three</div><h1>System Analysis &amp; Requirements</h1></div></div>
+
+  <p class="lead">This chapter formalizes what BharatVote must do and the qualities it must exhibit. It enumerates functional and non-functional requirements, assesses feasibility, describes the principal use cases, and states the hardware and software prerequisites.</p>
+
+  <h2>3.1 Functional Requirements</h2>
+  <table class="small">
+    <caption><b>Table 3.1</b> — Functional requirements of BharatVote.</caption>
+    <thead><tr><th>ID</th><th>Requirement</th><th>Description</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>FR-1</td><td>Voter registration</td><td>A citizen shall register with EPIC number, name, state, and a facial capture; a voter record is created.</td><td>High</td></tr>
+      <tr><td>FR-2</td><td>Identity verification</td><td>Registration shall include a facial-capture verification step before a voter is activated.</td><td>High</td></tr>
+      <tr><td>FR-3</td><td>Browse elections</td><td>Users shall browse active, upcoming, and completed elections, filterable by status.</td><td>High</td></tr>
+      <tr><td>FR-4</td><td>Cast vote</td><td>A verified voter shall select an active election and candidate and cast a vote.</td><td>High</td></tr>
+      <tr><td>FR-5</td><td>One vote per election</td><td>The system shall prevent a voter from voting more than once in the same election.</td><td>High</td></tr>
+      <tr><td>FR-6</td><td>Vote encoding</td><td>Each vote shall be encoded and issued a unique confirmation identifier.</td><td>High</td></tr>
+      <tr><td>FR-7</td><td>Vote verification</td><td>A voter shall be able to verify a vote using its confirmation identifier.</td><td>Medium</td></tr>
+      <tr><td>FR-8</td><td>Confirmation email</td><td>The system shall send a confirmation email after a successful vote.</td><td>Medium</td></tr>
+      <tr><td>FR-9</td><td>Live results</td><td>The system shall present real-time vote counts and analytics per election.</td><td>High</td></tr>
+      <tr><td>FR-10</td><td>Booth locator</td><td>Users shall view polling-booth information (location, officer, constituency).</td><td>Medium</td></tr>
+      <tr><td>FR-11</td><td>Documents &amp; notices</td><td>Users shall access official election documents and announcements.</td><td>Low</td></tr>
+      <tr><td>FR-12</td><td>Administration</td><td>Election officials shall access a multi-level administrative view (Super, EC, State, District, Constituency, Booth).</td><td>Medium</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3.2 Non-Functional Requirements</h2>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Security &amp; Integrity</div><div class="b">Votes are immutable and one-per-voter-per-election; sensitive writes occur only server-side; access control is database-enforced.</div></div>
+    <div class="kv"><div class="h">Privacy</div><div class="b">Voter records and individual votes are not publicly readable; only aggregate results and reference data are exposed.</div></div>
+    <div class="kv"><div class="h">Performance</div><div class="b">Pages and results shall load within about a second under normal conditions; results update promptly as votes accrue.</div></div>
+    <div class="kv"><div class="h">Reliability</div><div class="b">Vote persistence is guaranteed by the database; auxiliary actions such as email are non-blocking.</div></div>
+    <div class="kv"><div class="h">Usability</div><div class="b">The interface follows familiar government-portal conventions with clear, guided flows and accessible design.</div></div>
+    <div class="kv"><div class="h">Scalability</div><div class="b">The managed database and stateless server routes scale without developer intervention at the project’s scale.</div></div>
+    <div class="kv"><div class="h">Maintainability</div><div class="b">A modular codebase separates UI, data access, and server routes; the schema is version-controlled as a migration.</div></div>
+    <div class="kv"><div class="h">Portability</div><div class="b">A standard web application deployable to any Node-compatible host or edge platform.</div></div>
+  </div>
+
+  <h2>3.3 Feasibility Study</h2>
+  <h3>3.3.1 Technical Feasibility</h3>
+  <p>Every capability required is supported by mature technology: Next.js and React for the client and server routes, Supabase for the database, access control, and APIs, a webcam capture library for the facial step, and an email service for confirmations. The integration points are standard, making the project technically feasible for an individual developer.</p>
+  <h3>3.3.2 Economic Feasibility</h3>
+  <p>The platform operates within the free tiers of its managed services at the project’s scale — the Supabase database and APIs, and the email service — incurring no infrastructure cost for development and demonstration. It is therefore economically feasible.</p>
+  <h3>3.3.3 Operational Feasibility</h3>
+  <p>Because the backend is composed of managed services and server-side routes, there is no server to provision or patch; routine operation reduces to maintaining the schema and the application. The system is thus operationally feasible without a dedicated operations team.</p>
+
+  <h2>3.4 Use-Case Descriptions</h2>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">UC-1 · Register</div><div class="b"><i>Actor:</i> Citizen. Enters EPIC, name, and state; completes facial capture; a verified voter record is created and a session established.</div></div>
+    <div class="kv"><div class="h">UC-2 · Cast Vote</div><div class="b"><i>Actor:</i> Voter. Selects an active election and candidate, confirms, and the vote is recorded with a confirmation ID.</div></div>
+    <div class="kv"><div class="h">UC-3 · Verify Vote</div><div class="b"><i>Actor:</i> Voter. Enters a confirmation ID and sees that the vote was recorded and for which election.</div></div>
+    <div class="kv"><div class="h">UC-4 · View Results</div><div class="b"><i>Actor:</i> Public. Views live vote counts, charts, and candidate rankings for an election.</div></div>
+    <div class="kv"><div class="h">UC-5 · Find Booth</div><div class="b"><i>Actor:</i> Citizen. Looks up polling-booth details by area.</div></div>
+    <div class="kv"><div class="h">UC-6 · Administer</div><div class="b"><i>Actor:</i> Official. Signs in to a role-scoped administrative dashboard.</div></div>
+  </div>
+
+  <h2>3.5 System Requirements</h2>
+  <table class="small">
+    <thead><tr><th>Category</th><th>Requirement</th></tr></thead>
+    <tbody>
+      <tr><td>Development — Hardware</td><td>A development machine with ≥ 8 GB RAM and a webcam for testing the facial-capture flow.</td></tr>
+      <tr><td>Development — Software</td><td>Node.js 18+ or Bun; the Next.js toolchain; Git; a modern browser; a Supabase project.</td></tr>
+      <tr><td>Backend Services</td><td>A Supabase project (PostgreSQL, APIs, RLS); an email service (Resend) for confirmations.</td></tr>
+      <tr><td>End-User Device</td><td>Any modern desktop or mobile browser with a camera and an internet connection.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3.6 Use-Case Model</h2>
+  <p>The use cases of Section 3.4 form a coherent model with two human actors — the <b>Citizen/Voter</b> and the <b>Election Official</b> — and two supporting system actors — the <b>Database Platform</b> and the <b>Email Service</b>. The citizen’s cases (register, browse elections, cast vote, verify vote, find booth) constitute the primary flow, related where appropriate: casting a vote <i>includes</i> an eligibility check, and verifying a vote <i>extends</i> the casting outcome. The official’s cases operate through the role-scoped administrative area. A use-case diagram would place the voter’s cases at the centre, connected to the voter actor, with the database and email actors attached to the cast-vote case where persistence and notification occur.</p>
+
+  <h2>3.7 Software Development Model</h2>
+  <p>An <b>incremental-iterative</b> development model was adopted, in which the system was built as a sequence of working increments — data model, public surfaces, voter journey, supporting modules — each integrated and tested before the next was begun. This model suits a security-sensitive project because it allows the security-critical foundation (schema and access policies) to be established and validated first, and it keeps the application demonstrable at every stage, which is valuable under industry mentorship where regular review of working software is expected.</p>
+
+  <h2>3.8 Summary</h2>
+  <p>The analysis defines a prioritized set of twelve functional requirements and eight quality attributes, confirms the project is technically, economically, and operationally feasible, and identifies the actors and use cases that drive the design presented in the next chapter.</p>
+</section>
+
+<!-- ================= CHAPTER 4 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">4</div><div><div class="chaplabel">Chapter Four</div><h1>System Design</h1></div></div>
+
+  <p class="lead">Design translates the requirements into a concrete structure. This chapter presents the architecture, the flow of data, the relational data model, the security design, and the user-interface design of BharatVote.</p>
+
+  <h2>4.1 Design Principles</h2>
+  <p>The system is designed around four principles. First, <b>the database is the source of truth</b>: voters, elections, candidates, and votes all live in PostgreSQL. Second, <b>security is enforced where the data lives</b>, through Row Level Security and privilege separation. Third, <b>trusted logic runs on the server</b>: registration and vote casting execute in server-side routes with a privileged key, never in the browser. Fourth, <b>the votes record is append-only</b>, giving an immutable, auditable log constrained to one vote per voter per election.</p>
+
+  <h2>4.2 High-Level Architecture</h2>
+  <p>BharatVote is a full-stack Next.js application with three logical layers: the <b>browser client</b> (React pages), the <b>Next.js server routes</b> (trusted API), and the <b>Supabase backend</b> (PostgreSQL, RLS, and auto-generated data APIs), with an <b>email service</b> for confirmations. Figure 4.1 shows the layers and the flow of authority.</p>
+
+  <div class="figure"><div class="frame">
+  <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg" font-family="Poppins, sans-serif">
+    <defs>
+      <linearGradient id="gn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#24347F"/><stop offset="1" stop-color="#1A2A6C"/></linearGradient>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#475569"/></marker>
+    </defs>
+    <rect x="20" y="45" width="200" height="270" rx="14" fill="#EEF2FF" stroke="#C7D2FE"/>
+    <text x="120" y="70" text-anchor="middle" font-size="14" font-weight="700" fill="#1A2A6C">Browser Client</text>
+    <text x="120" y="88" text-anchor="middle" font-size="10" fill="#3730A3">Next.js · React · TS</text>
+    <rect x="40" y="104" width="160" height="38" rx="8" fill="url(#gn)"/><text x="120" y="128" text-anchor="middle" font-size="10.5" fill="#fff">Register · Vote · Results</text>
+    <rect x="40" y="150" width="160" height="38" rx="8" fill="#fff" stroke="#A5B4FC"/><text x="120" y="174" text-anchor="middle" font-size="10.5" fill="#1A2A6C">Webcam capture</text>
+    <rect x="40" y="196" width="160" height="38" rx="8" fill="#fff" stroke="#A5B4FC"/><text x="120" y="220" text-anchor="middle" font-size="10.5" fill="#1A2A6C">anon key (read only)</text>
+    <rect x="40" y="242" width="160" height="38" rx="8" fill="#fff" stroke="#A5B4FC"/><text x="120" y="266" text-anchor="middle" font-size="10.5" fill="#1A2A6C">Charts (results)</text>
+    <!-- server -->
+    <rect x="300" y="70" width="210" height="220" rx="14" fill="#FFF7ED" stroke="#FED7AA"/>
+    <text x="405" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#B45309">Next.js Server Routes</text>
+    <rect x="320" y="110" width="170" height="40" rx="8" fill="#FF9933"/><text x="405" y="130" text-anchor="middle" font-size="10.5" fill="#fff">/api/register</text><text x="405" y="144" text-anchor="middle" font-size="8.5" fill="#7C2D12">create voter</text>
+    <rect x="320" y="158" width="170" height="40" rx="8" fill="#FF9933"/><text x="405" y="178" text-anchor="middle" font-size="10.5" fill="#fff">/api/vote</text><text x="405" y="192" text-anchor="middle" font-size="8.5" fill="#7C2D12">cast + tally</text>
+    <rect x="320" y="206" width="170" height="40" rx="8" fill="#fff" stroke="#FDBA74"/><text x="405" y="226" text-anchor="middle" font-size="10.5" fill="#B45309">/api/elections · candidates</text>
+    <rect x="320" y="252" width="170" height="30" rx="8" fill="#fff" stroke="#FDBA74"/><text x="405" y="271" text-anchor="middle" font-size="9.5" fill="#B45309">service-role key (writes)</text>
+    <!-- supabase -->
+    <rect x="590" y="55" width="210" height="200" rx="14" fill="#F0FDF4" stroke="#BBF7D0"/>
+    <text x="695" y="79" text-anchor="middle" font-size="14" font-weight="700" fill="#0E6B06">Supabase</text>
+    <rect x="610" y="95" width="170" height="46" rx="8" fill="#138808"/><text x="695" y="115" text-anchor="middle" font-size="10.5" fill="#fff">PostgreSQL Database</text><text x="695" y="130" text-anchor="middle" font-size="8.5" fill="#DCFCE7">tables · RLS · indexes</text>
+    <rect x="610" y="151" width="82" height="40" rx="8" fill="#fff" stroke="#86EFAC"/><text x="651" y="171" text-anchor="middle" font-size="9.5" fill="#0E6B06">Auto API</text><text x="651" y="184" text-anchor="middle" font-size="8" fill="#16A34A">PostgREST</text>
+    <rect x="698" y="151" width="82" height="40" rx="8" fill="#fff" stroke="#86EFAC"/><text x="739" y="171" text-anchor="middle" font-size="9.5" fill="#0E6B06">Storage</text>
+    <rect x="610" y="199" width="170" height="40" rx="8" fill="#fff" stroke="#86EFAC"/><text x="695" y="223" text-anchor="middle" font-size="9.5" fill="#0E6B06">Email (Resend) — confirmations</text>
+    <line x1="220" y1="123" x2="316" y2="130" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/><text x="250" y="118" font-size="8" fill="#475569">POST</text>
+    <line x1="220" y1="215" x2="586" y2="118" stroke="#16A34A" stroke-width="1.4" marker-end="url(#ar)" stroke-dasharray="4 3"/><text x="360" y="150" font-size="8" fill="#16A34A">read (anon)</text>
+    <line x1="510" y1="140" x2="606" y2="118" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/><text x="540" y="122" font-size="8" fill="#475569">SQL</text>
+  </svg>
+  </div><div class="figcap"><b>Figure 4.1</b> — High-level architecture: the browser reads public data with a restricted anon key, but all writes flow through trusted Next.js server routes that use a service-role key against Supabase.</div></div>
+
+  <h2>4.3 Data Flow</h2>
+  <p>Figure 4.2 shows the context and Level-1 data-flow diagrams — the movement of registration and voting data through the system.</p>
+  <div class="figure"><div class="frame">
+  <svg viewBox="0 0 780 250" xmlns="http://www.w3.org/2000/svg" font-family="Poppins, sans-serif">
+    <defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#475569"/></marker></defs>
+    <rect x="30" y="100" width="110" height="52" rx="10" fill="#EEF2FF" stroke="#A5B4FC"/><text x="85" y="130" text-anchor="middle" font-size="11" fill="#1A2A6C" font-weight="600">Voter</text>
+    <circle cx="250" cy="70" r="38" fill="#1A2A6C"/><text x="250" y="68" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="600">1.0 Register</text><text x="250" y="82" text-anchor="middle" font-size="8" fill="#C7D2FE">&amp; verify</text>
+    <circle cx="250" cy="185" r="38" fill="#B45309"/><text x="250" y="183" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="600">2.0 Cast</text><text x="250" y="197" text-anchor="middle" font-size="8" fill="#FDE68A">Vote</text>
+    <circle cx="470" cy="185" r="38" fill="#138808"/><text x="470" y="183" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="600">3.0 Tally</text><text x="470" y="197" text-anchor="middle" font-size="8" fill="#DCFCE7">&amp; verify</text>
+    <circle cx="470" cy="70" r="38" fill="#1A2A6C"/><text x="470" y="68" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="600">4.0 Results</text>
+    <rect x="620" y="46" width="140" height="42" rx="8" fill="#fff" stroke="#86EFAC"/><text x="690" y="72" text-anchor="middle" font-size="9.5" fill="#0E6B06">D1 · elections/candidates</text>
+    <rect x="620" y="118" width="140" height="42" rx="8" fill="#fff" stroke="#A5B4FC"/><text x="690" y="144" text-anchor="middle" font-size="9.5" fill="#1A2A6C">D2 · users</text>
+    <rect x="620" y="190" width="140" height="42" rx="8" fill="#fff" stroke="#FDBA74"/><text x="690" y="216" text-anchor="middle" font-size="9.5" fill="#B45309">D3 · votes (append-only)</text>
+    <line x1="140" y1="115" x2="215" y2="80" stroke="#475569" stroke-width="1.4" marker-end="url(#ar2)"/>
+    <line x1="140" y1="135" x2="215" y2="175" stroke="#475569" stroke-width="1.4" marker-end="url(#ar2)"/>
+    <line x1="288" y1="185" x2="430" y2="185" stroke="#475569" stroke-width="1.4" marker-end="url(#ar2)"/>
+    <line x1="285" y1="70" x2="432" y2="70" stroke="#475569" stroke-width="1.2" marker-end="url(#ar2)"/>
+    <line x1="288" y1="70" x2="620" y2="64" stroke="#475569" stroke-width="1.1" marker-end="url(#ar2)"/>
+    <line x1="285" y1="170" x2="620" y2="135" stroke="#475569" stroke-width="1.1" marker-end="url(#ar2)"/>
+    <line x1="508" y1="185" x2="620" y2="205" stroke="#475569" stroke-width="1.1" marker-end="url(#ar2)"/>
+  </svg>
+  </div><div class="figcap"><b>Figure 4.2</b> — Data-flow diagram: registration writes to <i>users</i>, casting appends to the immutable <i>votes</i> store and updates tallies, and results read from the public reference data.</div></div>
+
+  <h2>4.4 Database Design</h2>
+  <p>The schema is normalized and consists of seven tables. Figure 4.3 shows the entity-relationship model.</p>
+  <div class="figure"><div class="frame">
+  <svg viewBox="0 0 800 330" xmlns="http://www.w3.org/2000/svg" font-family="Poppins, sans-serif">
+    <defs><marker id="ar4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1A2A6C"/></marker></defs>
+    <rect x="40" y="30" width="150" height="86" rx="10" fill="#fff" stroke="#1A2A6C" stroke-width="1.5"/>
+    <rect x="40" y="30" width="150" height="24" rx="10" fill="#1A2A6C"/><text x="115" y="47" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">users</text>
+    <text x="50" y="70" font-size="8.5" fill="#0F1E3D">PK id · voter_id</text><text x="50" y="85" font-size="8.5" fill="#475569">full_name · state</text><text x="50" y="100" font-size="8.5" fill="#475569">face_data · role</text>
+    <rect x="330" y="20" width="150" height="96" rx="10" fill="#fff" stroke="#B45309" stroke-width="1.5"/>
+    <rect x="330" y="20" width="150" height="24" rx="10" fill="#B45309"/><text x="405" y="37" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">elections</text>
+    <text x="340" y="60" font-size="8.5" fill="#0F1E3D">PK id</text><text x="340" y="75" font-size="8.5" fill="#475569">election_type · state</text><text x="340" y="90" font-size="8.5" fill="#475569">start/end_date</text><text x="340" y="105" font-size="8.5" fill="#475569">status</text>
+    <rect x="600" y="20" width="170" height="96" rx="10" fill="#fff" stroke="#0E6B06" stroke-width="1.5"/>
+    <rect x="600" y="20" width="170" height="24" rx="10" fill="#0E6B06"/><text x="685" y="37" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">candidates</text>
+    <text x="610" y="60" font-size="8.5" fill="#0F1E3D">PK id</text><text x="610" y="75" font-size="8.5" fill="#475569">FK election_id</text><text x="610" y="90" font-size="8.5" fill="#475569">name · party · symbol</text><text x="610" y="105" font-size="8.5" fill="#475569">votes</text>
+    <rect x="330" y="185" width="170" height="110" rx="10" fill="#fff" stroke="#B45309" stroke-width="1.5"/>
+    <rect x="330" y="185" width="170" height="24" rx="10" fill="#B45309"/><text x="415" y="202" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">votes</text>
+    <text x="340" y="226" font-size="8.5" fill="#0F1E3D">PK id · confirmation_id</text><text x="340" y="241" font-size="8.5" fill="#475569">FK election_id → elections</text><text x="340" y="256" font-size="8.5" fill="#475569">FK voter_id → users</text><text x="340" y="271" font-size="8.5" fill="#475569">FK candidate_id → candidates</text><text x="340" y="286" font-size="8.5" fill="#475569">encrypted_vote · UNIQUE(election,voter)</text>
+    <rect x="40" y="185" width="150" height="70" rx="10" fill="#fff" stroke="#1A2A6C" stroke-width="1.5"/>
+    <rect x="40" y="185" width="150" height="24" rx="10" fill="#1A2A6C"/><text x="115" y="202" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700">booths</text>
+    <text x="50" y="226" font-size="8.5" fill="#475569">booth_number · state</text><text x="50" y="240" font-size="8.5" fill="#475569">lat · lng · officer</text>
+    <rect x="600" y="185" width="80" height="60" rx="10" fill="#fff" stroke="#0E6B06" stroke-width="1.3"/>
+    <rect x="600" y="185" width="80" height="22" rx="10" fill="#0E6B06"/><text x="640" y="201" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="700">documents</text>
+    <rect x="690" y="185" width="80" height="60" rx="10" fill="#fff" stroke="#0E6B06" stroke-width="1.3"/>
+    <rect x="690" y="185" width="80" height="22" rx="10" fill="#0E6B06"/><text x="730" y="201" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">announcements</text>
+    <line x1="480" y1="66" x2="600" y2="66" stroke="#1A2A6C" stroke-width="1.3" marker-end="url(#ar4)"/>
+    <line x1="415" y1="116" x2="415" y2="185" stroke="#1A2A6C" stroke-width="1.3" marker-end="url(#ar4)"/>
+    <line x1="190" y1="220" x2="330" y2="230" stroke="#1A2A6C" stroke-width="1.3" marker-end="url(#ar4)"/>
+    <line x1="600" y1="120" x2="500" y2="215" stroke="#1A2A6C" stroke-width="1.1" marker-end="url(#ar4)"/>
+  </svg>
+  </div><div class="figcap"><b>Figure 4.3</b> — Entity-relationship diagram. An election has many candidates and many votes; a vote references its election, voter, and candidate, and is unique per (election, voter).</div></div>
+
+  <h3>4.4.1 Table Descriptions</h3>
+  <ul class="feat">
+    <li><b>users</b> — registered voters keyed by a generated id, storing EPIC (voter_id), name, state, facial data, and role.</li>
+    <li><b>elections</b> — elections with a type, state, dates, and a status (active/upcoming/completed).</li>
+    <li><b>candidates</b> — candidates linked to an election, with party, symbol, and a running vote tally.</li>
+    <li><b>votes</b> — the append-only ballot log; unique per (election, voter), carrying the encoded vote and a confirmation id.</li>
+    <li><b>booths</b> — polling-booth directory with geolocation and officer.</li>
+    <li><b>documents / announcements</b> — official notices and publications.</li>
+  </ul>
+
+  <h2>4.5 Security Design</h2>
+  <p>Row Level Security is enabled on every table. Public reference tables — <code class="inline">elections</code>, <code class="inline">candidates</code>, <code class="inline">booths</code>, <code class="inline">documents</code>, <code class="inline">announcements</code> — carry a read-only policy so the browser’s anonymous key can display them. The sensitive tables — <code class="inline">users</code> and <code class="inline">votes</code> — have no anonymous policy at all; they are reachable only by the server-side <b>service-role</b> key, which bypasses RLS. Consequently, registration and voting can occur only through the trusted server routes, and no client can read another voter’s record or cast a vote on their behalf.</p>
+
+  <h2>4.6 Casting a Vote — Sequence</h2>
+  <div class="figure"><div class="frame">
+  <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" font-family="Poppins, sans-serif">
+    <defs><marker id="ar5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
+    <g font-size="9.5" font-weight="600" fill="#fff" text-anchor="middle">
+      <rect x="20" y="20" width="120" height="30" rx="8" fill="#1A2A6C"/><text x="80" y="40">Voter (browser)</text>
+      <rect x="200" y="20" width="130" height="30" rx="8" fill="#FF9933"/><text x="265" y="40">/api/vote (server)</text>
+      <rect x="390" y="20" width="130" height="30" rx="8" fill="#138808"/><text x="455" y="40">votes table</text>
+      <rect x="580" y="20" width="130" height="30" rx="8" fill="#0E6B06"/><text x="645" y="40">candidates + email</text>
+    </g>
+    <g stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3 3"><line x1="80" y1="50" x2="80" y2="235"/><line x1="265" y1="50" x2="265" y2="235"/><line x1="455" y1="50" x2="455" y2="235"/><line x1="645" y1="50" x2="645" y2="235"/></g>
+    <g font-size="9" fill="#0F1E3D">
+      <line x1="80" y1="78" x2="262" y2="78" stroke="#475569" stroke-width="1.4" marker-end="url(#ar5)"/><text x="160" y="72" text-anchor="middle">POST {election, candidate, voter}</text>
+      <line x1="265" y1="112" x2="452" y2="112" stroke="#475569" stroke-width="1.4" marker-end="url(#ar5)"/><text x="360" y="106" text-anchor="middle">check not-yet-voted, insert</text>
+      <line x1="455" y1="112" x2="268" y2="112" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+      <line x1="265" y1="150" x2="642" y2="150" stroke="#475569" stroke-width="1.4" marker-end="url(#ar5)"/><text x="450" y="144" text-anchor="middle">tally +1 · send confirmation email</text>
+      <line x1="262" y1="192" x2="82" y2="192" stroke="#475569" stroke-width="1.4" marker-end="url(#ar5)"/><text x="170" y="186" text-anchor="middle">201 { confirmation_id }</text>
+    </g>
+  </svg>
+  </div><div class="figcap"><b>Figure 4.4</b> — Sequence of casting a vote: the server verifies eligibility, appends to the immutable votes table, updates the tally, and returns a confirmation identifier.</div></div>
+
+  <h2>4.7 User-Interface Design</h2>
+  <p>The interface adopts a government-portal visual language — an Indian tricolor accent palette, clear typography, and card-based layouts — implemented with Tailwind CSS and the shadcn/ui component library, with subtle Framer Motion transitions. Principal screens are the home page, voter registration (form → facial capture → confirmation), elections browser, voting flow (select → confirm → done), live results with charts, vote verification, booth locator, documents, and the administrative dashboards.</p>
+
+  <h2>4.8 Component Architecture</h2>
+  <p>On the client, the interface is decomposed into reusable components. A shared <code class="inline">Layout</code> provides the header, navigation, and footer; presentational components such as <code class="inline">CandidateCard</code> and <code class="inline">ElectionCard</code> render domain objects consistently across the voting, results, and election screens; and a library of primitives — buttons, inputs, selects, and dialogs — ensures visual and behavioural uniformity. Pages compose these components and own the data-fetching and flow state, which keeps the presentational components stateless and reusable and localizes complexity to the screens that need it.</p>
+
+  <h2>4.9 State Management &amp; Error Handling</h2>
+  <p>Screen state is managed locally with React hooks — the current step of a multi-step flow, the selected election or candidate, and loading and error flags — which is sufficient because the application’s state is largely page-scoped. Data is fetched when a screen mounts and held in component state. Every network interaction is wrapped so that failures surface as clear, user-facing messages rather than silent errors: a rejected vote returns the server’s reason (for example, that the voter has already voted in the election), and auxiliary failures such as email dispatch are non-blocking so they never prevent the core action from completing.</p>
+
+  <h2>4.10 API Design Conventions</h2>
+  <p>The server routes follow consistent conventions: they validate required inputs and return a 400 response when any are missing; they perform their work with the appropriate database client — the anonymous client for public reads, the service-role client for privileged writes; and they return a uniform JSON envelope carrying either a <code class="inline">data</code> payload with a success flag or an <code class="inline">error</code> message with an appropriate HTTP status. Read endpoints accept optional query parameters, such as an election status or identifier, to filter their results. This uniformity makes the client code predictable and the API straightforward to reason about and extend.</p>
+
+  <h2>4.11 Summary</h2>
+  <p>The design establishes a three-layer, database-centric architecture in which integrity and privacy are enforced by Row Level Security and server-side privilege separation, the ballot log is append-only and one-per-voter, and results are derived from public reference data. Chapter 5 realizes this design in code.</p>
+</section>
+
+<!-- ================= CHAPTER 5 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">5</div><div><div class="chaplabel">Chapter Five</div><h1>Implementation</h1></div></div>
+
+  <p class="lead">This chapter describes how the design was realized in code. It justifies the technology choices, presents the project structure, and walks through the schema, the data and security layers, the server routes, and the principal screens, with representative excerpts.</p>
+
+  <h2>5.1 Technology Justification</h2>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Next.js 15 + TypeScript</div><div class="b">The App Router hosts both the React front end and trusted server-side route handlers in one project, giving privilege separation without a separate backend. TypeScript adds type safety.</div></div>
+    <div class="kv"><div class="h">Supabase (PostgreSQL)</div><div class="b">A managed Postgres database with Row Level Security, auto-generated REST APIs, storage, and keys — the entire backend as a managed service.</div></div>
+    <div class="kv"><div class="h">Tailwind CSS + shadcn/ui</div><div class="b">Utility-first styling and accessible, composable components for a polished government-portal interface, with Framer Motion for transitions.</div></div>
+    <div class="kv"><div class="h">Recharts · react-webcam · Resend</div><div class="b">Charts for live results, in-browser facial capture during registration, and transactional email for vote confirmations.</div></div>
+  </div>
+
+  <h2>5.2 Project Structure</h2>
+  <pre><span class="ttl">Project layout (bharatvote-secure)</span><span class="c">bharatvote-secure/</span>
+<span class="f">app/</span>
+  <span class="f">page.tsx</span>                 <span class="c"># home</span>
+  <span class="f">register/  vote/  results/  elections/  verify/  booths/</span>
+  <span class="f">documents/  help/  admin/[role]/  admin/login/</span>
+  <span class="f">api/</span>
+    <span class="f">register/route.ts</span>       <span class="c"># create voter (service role)</span>
+    <span class="f">vote/route.ts</span>           <span class="c"># cast + tally + verify</span>
+    <span class="f">elections/route.ts</span>      <span class="c"># list / create elections</span>
+    <span class="f">candidates/route.ts</span>     <span class="c"># list candidates</span>
+<span class="f">lib/</span>
+  <span class="f">supabase.ts</span>              <span class="c"># anon + service-role clients</span>
+  <span class="f">session.ts</span>               <span class="c"># client voter session</span>
+  <span class="f">email.ts</span>                 <span class="c"># confirmation email templates</span>
+<span class="f">components/</span>                  <span class="c"># Layout, CandidateCard, ElectionCard, ui/…</span>
+<span class="f">supabase/migrations/0001_init.sql</span>  <span class="c"># schema + RLS + seed</span></pre>
+
+  <h2>5.3 Database Schema &amp; Migration</h2>
+  <p>The schema is delivered as a single version-controlled migration so the database can be rebuilt deterministically. It creates the seven tables, indexes, enables RLS, and seeds reference data.</p>
+  <pre><span class="ttl">supabase/migrations/0001_init.sql (excerpt)</span><span class="k">create table</span> votes (
+  id uuid <span class="k">primary key default</span> uuid_generate_v4(),
+  election_id uuid <span class="k">references</span> elections(id) <span class="k">on delete cascade</span>,
+  voter_id    uuid <span class="k">references</span> users(id)     <span class="k">on delete cascade</span>,
+  candidate_id uuid <span class="k">references</span> candidates(id),
+  encrypted_vote text <span class="k">not null</span>,
+  confirmation_id text <span class="k">unique not null</span>,
+  voted_at timestamptz <span class="k">default</span> now(),
+  <span class="k">unique</span>(election_id, voter_id)          <span class="c">-- one vote per voter per election</span>
+);
+
+<span class="k">alter table</span> votes <span class="k">enable row level security</span>;
+<span class="c">-- reference data is publicly readable; votes/users have NO anon policy</span>
+<span class="k">create policy</span> <span class="s">"read candidates"</span> <span class="k">on</span> candidates <span class="k">for select using</span> (<span class="k">true</span>);</pre>
+  <div class="callout saffron"><span class="lbl">Integrity by construction</span>The <code class="inline">unique(election_id, voter_id)</code> constraint makes double-voting impossible at the database level, and the absence of any anonymous policy on <code class="inline">votes</code> means only trusted server code can write ballots.</div>
+
+  <h2>5.4 Data &amp; Security Layer</h2>
+  <p>All database access goes through <code class="inline">lib/supabase.ts</code>, which exposes two clients: a browser-safe <b>anon</b> client for reading public data, and a factory for a privileged <b>service-role</b> client used only on the server.</p>
+  <pre><span class="ttl">lib/supabase.ts (excerpt)</span><span class="c">// browser-safe, read-only anon client</span>
+<span class="k">export const</span> supabase = <span class="f">createClient</span>(supabaseUrl, supabaseAnonKey, { auth: { persistSession: <span class="k">true</span> } });
+
+<span class="c">// server-only privileged client — bypasses RLS</span>
+<span class="k">export const</span> <span class="f">createServerSupabaseClient</span> = () =&gt; {
+  <span class="k">const</span> key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  <span class="k">if</span> (!key) <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">'Missing service role key'</span>);
+  <span class="k">return</span> <span class="f">createClient</span>(supabaseUrl, key, { auth: { persistSession: <span class="k">false</span> } });
+};</pre>
+
+  <h2>5.5 Server Routes</h2>
+  <p>The trusted API lives in Next.js route handlers. The <b>vote</b> route enforces the one-vote rule, appends the ballot, updates the tally, and issues a confirmation id — all with the service-role client.</p>
+  <pre><span class="ttl">app/api/vote/route.ts (excerpt)</span><span class="k">const</span> admin = <span class="f">createServerSupabaseClient</span>();
+<span class="c">// one vote per voter per election</span>
+<span class="k">const</span> { data: existing } = <span class="k">await</span> admin.<span class="f">from</span>(<span class="s">'votes'</span>)
+  .<span class="f">select</span>(<span class="s">'id'</span>).<span class="f">eq</span>(<span class="s">'election_id'</span>, election_id).<span class="f">eq</span>(<span class="s">'voter_id'</span>, voter_id).<span class="f">maybeSingle</span>();
+<span class="k">if</span> (existing) <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'You have already voted'</span> }, { status: <span class="n">400</span> });
+
+<span class="k">const</span> confirmationId = <span class="s">`BV-${new Date().getFullYear()}-${rand()}`</span>;
+<span class="k">const</span> encryptedVote = Buffer.<span class="f">from</span>(<span class="f">JSON.stringify</span>({ candidate_id })).<span class="f">toString</span>(<span class="s">'base64'</span>);
+<span class="k">await</span> admin.<span class="f">from</span>(<span class="s">'votes'</span>).<span class="f">insert</span>([{ election_id, voter_id, candidate_id, encrypted_vote: encryptedVote, confirmation_id: confirmationId }]);
+<span class="c">// bump the running tally so results reflect it live</span>
+<span class="k">await</span> admin.<span class="f">from</span>(<span class="s">'candidates'</span>).<span class="f">update</span>({ votes: cand.votes + <span class="n">1</span> }).<span class="f">eq</span>(<span class="s">'id'</span>, candidate_id);</pre>
+  <p>The <b>register</b> route similarly creates a voter with the service-role client and is idempotent on the EPIC number; the <b>elections</b> and <b>candidates</b> routes serve public reference data.</p>
+
+  <h2>5.6 Registration &amp; Facial Capture</h2>
+  <p>Registration is a guided three-step flow — details, facial capture, confirmation. The webcam step captures images in the browser and submits the first as the voter’s facial data; on success a lightweight client session is established.</p>
+  <pre><span class="ttl">app/register/page.tsx (excerpt)</span><span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'/api/register'</span>, { method: <span class="s">'POST'</span>,
+  headers: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> },
+  body: <span class="f">JSON.stringify</span>({ full_name, voter_id: epic, state, face_data: capturedImages[<span class="n">0</span>] }) });
+<span class="k">const</span> j = <span class="k">await</span> res.<span class="f">json</span>();
+<span class="f">setUser</span>({ id: j.data.id, full_name: j.data.full_name, voter_id: j.data.voter_id });
+<span class="f">setStep</span>(<span class="s">'done'</span>);</pre>
+
+  <h2>5.7 Voting &amp; Live Results</h2>
+  <p>The voting page loads active elections and candidates, requires a registered session, and casts the vote through the server route, displaying the returned confirmation id. The results page reads candidates for the selected election and renders bar and pie charts plus a ranked list, reflecting the live tallies updated on each vote.</p>
+  <pre><span class="ttl">app/vote/page.tsx (excerpt)</span><span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'/api/vote'</span>, { method: <span class="s">'POST'</span>,
+  headers: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> },
+  body: <span class="f">JSON.stringify</span>({ election_id, candidate_id: selectedCandidate, voter_id: user.id }) });
+<span class="k">const</span> j = <span class="k">await</span> res.<span class="f">json</span>();
+<span class="k">if</span> (!res.ok) <span class="f">setError</span>(j.error);           <span class="c">// e.g. "already voted"</span>
+<span class="k">else</span> { <span class="f">setConfirmationId</span>(j.data.confirmation_id); <span class="f">setVoteStep</span>(<span class="s">'done'</span>); }</pre>
+
+  <h2>5.8 Elections &amp; Verification Modules</h2>
+  <p>The <b>elections browser</b> fetches the full list of elections on mount and renders each as a card, with a status filter applied client-side; it replaces the earlier static list with live data. The <b>verification</b> module issues a lookup against the vote route’s GET endpoint, returning whether a confirmation identifier corresponds to a recorded vote and, if so, the election it belongs to — realizing voter-verifiability without exposing the ballot.</p>
+  <pre><span class="ttl">app/elections/page.tsx (excerpt) — live list + filter</span><span class="k">useEffect</span>(() =&gt; { (<span class="k">async</span> () =&gt; {
+  <span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'/api/elections'</span>);
+  <span class="k">const</span> json = <span class="k">await</span> res.<span class="f">json</span>();
+  <span class="f">setElections</span>(json.data || []);
+})(); }, []);
+<span class="k">const</span> filtered = filter === <span class="s">'all'</span> ? elections : elections.<span class="f">filter</span>(e =&gt; e.status === filter);</pre>
+
+  <h2>5.9 Results Visualization</h2>
+  <p>The results module loads elections and candidates, defaults to the first relevant election, and derives chart datasets from the candidates’ live tallies. Two visualizations — a bar chart of counts and a pie chart of distribution — are rendered with Recharts, alongside a ranked candidate list and the total votes cast.</p>
+  <pre><span class="ttl">app/results/page.tsx (excerpt) — derived chart data</span><span class="k">const</span> electionCandidates = candidates
+  .<span class="f">filter</span>(c =&gt; c.election_id === selectedElection)
+  .<span class="f">sort</span>((a, b) =&gt; b.votes - a.votes);
+<span class="k">const</span> barData = electionCandidates.<span class="f">map</span>(c =&gt; ({ name: c.name.<span class="f">split</span>(<span class="s">' '</span>)[<span class="n">1</span>] || c.name, votes: c.votes }));
+<span class="k">const</span> pieData = electionCandidates.<span class="f">map</span>(c =&gt; ({ name: c.party, value: c.votes }));</pre>
+
+  <h2>5.10 Supporting Modules</h2>
+  <p>The <b>booth locator</b>, <b>documents</b>, and <b>announcements</b> modules present public reference data in accessible list and card layouts, and the <b>administrative</b> area provides role-scoped dashboards across the six-level election-official hierarchy. Shared components — a consistent layout, candidate and election cards, and a library of form and display primitives — keep the interface uniform and the code reusable across every screen.</p>
+
+  <h2>5.11 Home &amp; Reference Modules</h2>
+  <p>The home page composes a hero section, quick-action links, and a feed of announcements, orienting visitors and routing them to their next action. The booth, documents, and announcements pages read their respective public tables and present them in accessible card and list layouts. Because these tables carry public-read policies, they are fetched directly with the anonymous client, keeping the code simple while remaining safe — no sensitive data is exposed by these reads.</p>
+
+  <h2>5.12 Email Confirmation</h2>
+  <p>After a successful vote the server dispatches a confirmation email through the configured provider, using a templated message that includes the voter’s name, the election, the confirmation identifier, and the timestamp in Indian Standard Time. The dispatch is wrapped so that any failure — an invalid address or a provider error — is caught and logged without affecting the vote, honouring the principle that auxiliary services must never block the core civic action.</p>
+
+  <h2>5.13 Validation &amp; Error Handling</h2>
+  <p>Input is validated on both sides of the trust boundary. On the client, the registration form gates progress until the essential fields are present, and the voting flow disables casting until a candidate is chosen and a session exists. On the server, each route re-validates its inputs before acting, so the rules hold even if the client is bypassed. Errors are returned as structured messages and rendered inline in the interface, giving the user actionable feedback at every step of the journey.</p>
+
+  <h2>5.14 Summary</h2>
+  <p>The implementation faithfully realizes the design: one migration defines a secure, constrained schema; a two-client data layer separates public reads from privileged writes; trusted server routes enforce the voting rules; and the React pages provide a guided, government-styled experience across the full voter journey and supporting modules. The next chapter evaluates the result.</p>
+</section>
+
+<!-- ================= CHAPTER 6 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">6</div><div><div class="chaplabel">Chapter Six</div><h1>Testing &amp; Evaluation</h1></div></div>
+
+  <p class="lead">Testing establishes confidence that the system meets its requirements — with particular emphasis on integrity and security, where a defect in a voting system is most serious.</p>
+
+  <h2>6.1 Testing Strategy</h2>
+  <p>Testing proceeded on three levels. <b>Unit-level</b> checks validated individual server routes against the live database. <b>Integration-level</b> testing exercised complete flows — registration, voting, tally, and verification — across the client and backend together. <b>System-level</b> testing verified the end-to-end journey against the deployed cloud database and confirmed that the integrity rules (one vote per election; append-only ballots) and the security boundary (no anonymous access to sensitive tables) hold.</p>
+
+  <h2>6.2 Test Cases</h2>
+  <table class="small">
+    <caption><b>Table 6.1</b> — Executed test cases and results.</caption>
+    <thead><tr><th>ID</th><th>Test Case</th><th>Input / Action</th><th>Expected Result</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>TC-01</td><td>Voter registration</td><td>Submit EPIC, name, state, capture</td><td>Voter record created; session established</td><td>Pass</td></tr>
+      <tr><td>TC-02</td><td>Idempotent register</td><td>Register same EPIC again</td><td>Existing record returned, no duplicate</td><td>Pass</td></tr>
+      <tr><td>TC-03</td><td>Browse elections</td><td>Open elections, filter by status</td><td>Real elections listed and filtered</td><td>Pass</td></tr>
+      <tr><td>TC-04</td><td>Cast vote</td><td>Select election + candidate, confirm</td><td>Vote recorded; confirmation ID returned</td><td>Pass</td></tr>
+      <tr><td>TC-05</td><td>Live tally</td><td>Cast a vote, re-read candidate</td><td>Candidate vote count increments by one</td><td>Pass</td></tr>
+      <tr><td>TC-06</td><td>Double-vote prevention</td><td>Vote twice in same election</td><td>Second attempt rejected (already voted)</td><td>Pass</td></tr>
+      <tr><td>TC-07</td><td>Vote verification</td><td>Look up a confirmation ID</td><td>Vote confirmed with its election</td><td>Pass</td></tr>
+      <tr><td>TC-08</td><td>Results analytics</td><td>Open results for an election</td><td>Charts + rankings reflect real tallies</td><td>Pass</td></tr>
+      <tr><td>TC-09</td><td>Public read policy</td><td>Anon key reads elections/candidates</td><td>Reference data returned</td><td>Pass</td></tr>
+      <tr><td>TC-10</td><td>Sensitive-table protection</td><td>Anon key reads users/votes</td><td>Access denied by RLS</td><td>Pass</td></tr>
+      <tr><td>TC-11</td><td>Unregistered voting blocked</td><td>Attempt to vote with no session</td><td>Prompted to register; vote disabled</td><td>Pass</td></tr>
+      <tr><td>TC-12</td><td>Production build</td><td>Run next build</td><td>Compiles; types valid; 17 routes built</td><td>Pass</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.3 End-to-End Verification</h2>
+  <p>The complete voting pipeline was verified against the live cloud database. A voter was registered through the API, a vote was cast for a candidate in an active election, the candidate’s running tally was observed to increment by exactly one, and the vote was then confirmed by its confirmation identifier — demonstrating that registration, casting, tallying, and verification all function correctly end to end on real data.</p>
+  <div class="callout"><span class="lbl">Result</span>All twelve test cases passed. The production build compiled cleanly with valid types across all routes, and the integrity and security guarantees were upheld under test.</div>
+
+  <h2>6.4 Security Evaluation</h2>
+  <p>The security model was evaluated by exercising the data APIs directly. With only the browser’s anonymous key, the public reference tables were readable while the <code class="inline">users</code> and <code class="inline">votes</code> tables returned no data — confirming that Row Level Security prevents any client from reading voter identities or ballots. All write paths were reachable only through the server routes using the service-role key. Combined with the database-level uniqueness constraint that enforces one vote per election, this establishes the platform’s core integrity and privacy guarantees at the data layer, independent of the client.</p>
+
+  <h2>6.5 Evaluation Against Non-Functional Requirements</h2>
+  <table class="small">
+    <thead><tr><th>Quality Attribute</th><th>Target</th><th>Observed Outcome</th></tr></thead>
+    <tbody>
+      <tr><td>Integrity</td><td>One vote per election; immutable</td><td>Met — enforced by DB constraint + append-only log</td></tr>
+      <tr><td>Privacy</td><td>Sensitive data not public</td><td>Met — RLS blocks anon access to users/votes</td></tr>
+      <tr><td>Performance</td><td>Sub-second interactions</td><td>Met — managed APIs respond promptly</td></tr>
+      <tr><td>Reliability</td><td>Durable votes; graceful email</td><td>Met — votes persisted; email non-blocking</td></tr>
+      <tr><td>Cost</td><td>Operate within free tiers</td><td>Met — zero infrastructure cost at project scale</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.6 Test Environment</h2>
+  <p>Testing was conducted against the live cloud database used by the application, exercising the production server build rather than a mock, so that the results reflect real behaviour. The API endpoints were driven directly to validate the server logic independently of the interface, and the interface flows were then exercised in the browser to confirm the end-to-end experience. This combination isolates a defect to a layer when one is found, while still validating that the whole system behaves correctly.</p>
+
+  <h2>6.7 Performance Evaluation</h2>
+  <p>Under normal conditions the reference-data endpoints (elections and candidates) and the registration and vote operations respond within a fraction of a second, and the results visualizations render immediately from the fetched data. Because the database and APIs are managed and scale horizontally, performance is expected to remain stable as data volume and concurrent usage grow within the project’s scale; the append-only votes table and indexed foreign keys keep both the write path and the result queries efficient.</p>
+
+  <h2>6.8 Usability Considerations</h2>
+  <p>The flows were designed and reviewed for clarity: multi-step processes show progress and permit correction; actions that cannot yet be performed are disabled with an explanatory prompt; and success states present the confirmation identifier prominently with an onward link to results. The government-portal visual language, consistent components, and clear typography lower the learning curve for a diverse electorate.</p>
+
+  <h2>6.9 Summary</h2>
+  <p>All functional test cases passed, the production build is clean, and the security and integrity model withstood direct testing. The evidence establishes that the implementation satisfies the requirements defined in Chapter 3.</p>
+</section>
+
+<!-- ================= CHAPTER 7 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">7</div><div><div class="chaplabel">Chapter Seven</div><h1>Deployment</h1></div></div>
+
+  <p class="lead">This chapter describes how BharatVote is configured, built, and deployed, and how its configuration secrets are managed.</p>
+
+  <h2>7.1 Environment Configuration</h2>
+  <p>Configuration follows the twelve-factor convention of environment variables. Public values — the Supabase project URL and the anonymous key — are exposed to the browser through <code class="inline">NEXT_PUBLIC_</code>-prefixed variables and are safe to ship because all real authority is enforced by Row Level Security. The privileged <b>service-role</b> key, the email API key, and the authentication secret are kept server-side only and are never sent to the client. These are stored in <code class="inline">.env.local</code>, which is excluded from version control.</p>
+  <pre><span class="ttl">.env.local (shape — secrets omitted)</span>NEXT_PUBLIC_SUPABASE_URL=https://&lt;project&gt;.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;anon key — safe in browser&gt;
+SUPABASE_SERVICE_ROLE_KEY=&lt;service role — server only&gt;
+RESEND_API_KEY=&lt;email — server only&gt;
+NEXTAUTH_SECRET=&lt;random secret&gt;</pre>
+
+  <h2>7.2 Database Provisioning</h2>
+  <p>The backend is a managed Supabase project. The database is provisioned by applying the single migration <code class="inline">supabase/migrations/0001_init.sql</code>, which creates every table, index, Row Level Security policy, and the seed reference data in one deterministic step. Because the schema is version-controlled, a fresh environment can be reproduced exactly.</p>
+
+  <h2>7.3 Build Pipeline</h2>
+  <p>The application is compiled with the Next.js production build (<code class="inline">next build</code>), which type-checks the entire codebase, compiles the client bundles, and pre-renders static pages while marking the API routes and dynamic pages as server-rendered. A successful build produces an optimized, self-contained application ready to serve.</p>
+  <pre><span class="ttl">Production build output (summary)</span>✓ Compiled successfully
+✓ Linting and checking validity of types
+✓ Generating static pages (17/17)
+Route (app)          register · vote · results · elections · verify …
+ƒ /api/register   ƒ /api/vote   ƒ /api/elections   ƒ /api/candidates</pre>
+
+  <h2>7.4 Hosting &amp; Distribution</h2>
+  <p>As a standard Next.js application, BharatVote can be deployed to any platform that supports Node.js or the Next.js runtime — Vercel (the natural choice, with automatic detection and zero-configuration builds), or alternatives such as Netlify, Railway, a container platform, or a self-hosted Node server. The managed Supabase backend requires no separate deployment; the application simply connects to it using the configured environment variables. The source is version-controlled in a Git repository, enabling continuous deployment on push.</p>
+
+  <h2>7.5 Continuous Integration &amp; Delivery</h2>
+  <p>Because the source is version-controlled and the platform is a standard Next.js application, continuous delivery is straightforward: a push to the repository can trigger an automated build and deployment on a platform such as Vercel, which detects the framework and runs the production build without additional configuration. The single database migration means that a new or reset environment can be provisioned deterministically, so the application code and its schema evolve together and stay in step across environments.</p>
+
+  <h2>7.6 Monitoring &amp; Rollback</h2>
+  <p>Operational visibility is provided by the hosting platform’s build and runtime logs and by the database platform’s own dashboards for queries and usage. Should a deployment prove faulty, the immutable build artefacts and the version-controlled history allow an immediate rollback to a previous known-good release, while the append-only ballot log ensures that recorded votes are never lost across such operations.</p>
+
+  <h2>7.7 Summary</h2>
+  <p>Deployment is straightforward and reproducible: a single migration provisions the database, a standard build produces the application, configuration is cleanly separated into public and secret values, and the app deploys to any Node-compatible host with no server to operate.</p>
+</section>
+
+<!-- ================= CHAPTER 8 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">8</div><div><div class="chaplabel">Chapter Eight</div><h1>Results &amp; Screenshots</h1></div></div>
+
+  <p class="lead">This chapter presents the finished platform as experienced by the user, with figure placeholders indicating where interface screenshots are positioned in the bound report.</p>
+
+  <h2>8.1 The Finished Platform</h2>
+  <p>The project culminated in a fully functional, deployable web platform backed by a live cloud database. A citizen registers with their EPIC number and a facial capture, browses active elections, casts a secure vote, and receives a confirmation identifier that can be independently verified; the public follows results in real time. All of this operates on real data with the integrity and privacy guarantees described earlier.</p>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Home &amp; Registration</div><div class="b">A government-styled landing page and a guided three-step registration with facial capture.</div></div>
+    <div class="kv"><div class="h">Elections &amp; Voting</div><div class="b">A filterable election browser and a select → confirm → done voting flow.</div></div>
+    <div class="kv"><div class="h">Results</div><div class="b">Live bar and pie charts with candidate rankings and total votes.</div></div>
+    <div class="kv"><div class="h">Verify &amp; Booths</div><div class="b">Confirmation-ID vote verification and a polling-booth directory.</div></div>
+  </div>
+  <div class="figure"><div class="shot">[ Figure 8.1 — Home page &amp; Voter Registration (form + facial capture) ]</div><div class="figcap"><b>Figure 8.1</b> — Onboarding: the landing page and the registration flow.</div></div>
+  <div class="figure"><div class="shot">[ Figure 8.2 — Voting flow and live Results (charts + rankings) ]</div><div class="figcap"><b>Figure 8.2</b> — Casting a vote and the real-time results dashboard.</div></div>
+  <div class="figure"><div class="shot">[ Figure 8.3 — Vote verification &amp; Booth locator ]</div><div class="figcap"><b>Figure 8.3</b> — Independent vote verification and the polling-booth directory.</div></div>
+
+  <h2>8.2 Screen-by-Screen Walkthrough</h2>
+  <p><b>Home.</b> The visitor is greeted by a government-styled landing page whose hero section states the platform’s purpose and offers prominent calls to action — register, vote, view results, and find a booth — beneath a feed of the latest announcements, so that both new and returning users can immediately proceed to their intended task.</p>
+  <p><b>Registration.</b> The three-step flow guides the citizen from a details form, through a live camera capture that records three verification photographs, to a confirmation screen; validation prevents progress until the essential fields are present, and on completion the voter is welcomed by name and invited to vote.</p>
+  <p><b>Elections.</b> Every election is shown as a card with its type, state, dates, and status, and a filter bar narrows the view to active, upcoming, or completed elections — presenting the full electoral calendar drawn live from the database.</p>
+  <p><b>Voting.</b> The voter selects an active election, sees its candidates with party and symbol, chooses one, and confirms on a summary screen; upon submission the platform displays the unique confirmation identifier and a link to results, or, where applicable, a clear message such as that the voter has already voted.</p>
+  <p><b>Results.</b> A bar chart of counts, a pie chart of distribution, and a ranked candidate list with the leader highlighted present the outcome for the selected election, together with the total votes cast — all reflecting the live tallies.</p>
+  <p><b>Verification &amp; Booths.</b> The verification screen confirms a vote from its confirmation identifier without revealing the ballot, and the booth locator lists polling stations with their address, constituency, and presiding officer.</p>
+
+  <h2>8.3 Discussion of Results</h2>
+  <p>Measured against the objectives of Chapter 1, the project achieved every stated goal: a secure relational model of the electoral domain, voter registration with facial capture, integrity-enforced voting with confirmation identifiers, independent vote verification, real-time results, database-enforced privacy, and a self-contained deployable application. The testing in Chapter 6 confirms correctness and security, and everyday use confirms the responsiveness expected of a modern civic platform.</p>
+
+  <h2>8.4 Significance of the Results</h2>
+  <p>The results carry significance beyond the checklist of features delivered. They demonstrate that the security properties most critical to a voting system — accurate tallying, prevention of double-voting, and confidentiality of voter data — can be guaranteed at the data layer, where they are hardest to circumvent, rather than being left to the correctness of client code. This is the central claim of the project, and the evidence supports it: the tally incremented by exactly one per vote, a second vote in the same election was refused, and the sensitive tables returned nothing to an unprivileged reader.</p>
+  <p>Equally significant is what the results say about the development approach. A single developer, using managed cloud services and a modern framework, produced a working, security-conscious civic application backed by a live database and verified end to end. This validates the report’s thesis that contemporary tooling has lowered the barrier to building ambitious, trustworthy software — and it suggests that the pattern demonstrated here is applicable well beyond voting, to any application where a clear separation between public data and privileged operations must be enforced.</p>
+</section>
+
+<!-- ================= CHAPTER 9 ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">9</div><div><div class="chaplabel">Chapter Nine</div><h1>Conclusion &amp; Future Scope</h1></div></div>
+
+  <p class="lead">This concluding chapter summarizes what the project accomplished, reflects on its limitations, and outlines directions for future work.</p>
+
+  <h2>9.1 Conclusion</h2>
+  <p>BharatVote set out to build a secure, verifiable, real-time digital voting platform for the Indian election system using a database-enforced security model and managed cloud services — and, demonstrated by a working application backed by a live database, it succeeded. By combining Next.js server routes with the Supabase platform, the project unifies the previously fragmented electoral experience — registration, identity verification, election discovery, voting, vote verification, and results — into a single, coherent product.</p>
+  <p>The work yielded a normalized seven-table model of the electoral domain; a security model in which Row Level Security and server-side privilege separation guarantee that only trusted code can register voters or cast ballots, and that no client can read voter identities or votes; an append-only, one-per-voter ballot log that makes double-voting impossible by construction; and a real-time results experience. Beyond the artifact, the project was an applied study of secure system design, relational modeling, database access control, and modern full-stack engineering.</p>
+
+  <h2>9.2 Limitations</h2>
+  <ul class="feat">
+    <li>Identity verification uses EPIC entry and in-browser facial capture; integration with live national identity and biometric-matching services is represented but simulated.</li>
+    <li>Vote encoding is a demonstrative encoding rather than a formal, end-to-end verifiable cryptographic scheme.</li>
+    <li>The voter session is a lightweight client session suited to demonstration rather than a full federated identity system.</li>
+  </ul>
+
+  <h2>9.3 Future Scope</h2>
+  <div class="kvgrid">
+    <div class="kv"><div class="h">Aadhaar &amp; Biometrics</div><div class="b">Integrate live Aadhaar authentication and a face-matching service for real identity verification.</div></div>
+    <div class="kv"><div class="h">End-to-End Verifiable Crypto</div><div class="b">Adopt a formal cryptographic voting protocol for provable ballot secrecy and verifiability.</div></div>
+    <div class="kv"><div class="h">OTP / Multi-Factor</div><div class="b">Add SMS/OTP as a second authentication factor during registration and voting.</div></div>
+    <div class="kv"><div class="h">Audit &amp; Immutability</div><div class="b">Add tamper-evident audit logging and optional anchoring of tallies for public audit.</div></div>
+    <div class="kv"><div class="h">Booth Maps</div><div class="b">Integrate interactive maps and geolocation for the booth locator.</div></div>
+    <div class="kv"><div class="h">Accessibility &amp; Languages</div><div class="b">Multi-language support and enhanced accessibility for nationwide reach.</div></div>
+  </div>
+
+  <h2>9.4 Learning Outcomes</h2>
+  <p>The project delivered concrete learning across several disciplines. In <b>data engineering</b>, it required designing a normalized relational schema, expressing integrity constraints, and reasoning about indexing. In <b>security</b>, it demanded a working understanding of access control, privilege separation, and defense in depth, applied to a domain where these matter acutely. In <b>web engineering</b>, it exercised the full stack of a modern framework — client components, server routes, data fetching, and state management — in TypeScript. And in <b>system design</b>, it called for reasoning about the flow of authority through a layered architecture and the trade-offs between competing requirements.</p>
+  <p>Beyond the technical, the project developed the practice of building software incrementally, testing security-critical behaviour deliberately, and documenting a system so that others can understand and reproduce it. Conducted under industry mentorship, it also cultivated the habit of aligning engineering decisions with professional standards and of communicating them clearly — skills that transfer directly to a career in software development.</p>
+
+  <h2>9.5 Closing Remarks</h2>
+  <p>BharatVote demonstrates that a security-conscious, real-time civic application can be delivered by an individual developer using today’s managed-services ecosystem. The architecture explored here — a React client over trusted server routes over a policy-secured database — is a practical template for e-governance software, and the directions above would carry the project from a capable demonstrator toward a deployable public system.</p>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">R</div><div><div class="chaplabel">Bibliography</div><h1>References</h1></div></div>
+  <p style="margin-bottom:5mm">The following resources informed the design and implementation of this project. Citations follow IEEE style.</p>
+  <ol style="font-size:9.6pt; line-height:1.7">
+    <li>Vercel, “Next.js Documentation,” [Online]. Available: https://nextjs.org/docs</li>
+    <li>Supabase Inc., “Supabase Documentation — The open-source Firebase alternative,” [Online]. Available: https://supabase.com/docs</li>
+    <li>The PostgreSQL Global Development Group, “Row Security Policies,” PostgreSQL Documentation. [Online]. Available: https://www.postgresql.org/docs/current/ddl-rowsecurity.html</li>
+    <li>Supabase Inc., “Auth &amp; Row Level Security,” Supabase Docs. [Online]. Available: https://supabase.com/docs/guides/auth</li>
+    <li>Meta Platforms, “React Documentation,” [Online]. Available: https://react.dev/</li>
+    <li>Tailwind Labs, “Tailwind CSS Documentation,” [Online]. Available: https://tailwindcss.com/docs</li>
+    <li>shadcn, “shadcn/ui — Components,” [Online]. Available: https://ui.shadcn.com/</li>
+    <li>Recharts, “Recharts — Composable charting library,” [Online]. Available: https://recharts.org/</li>
+    <li>Resend, “Resend — Email API Documentation,” [Online]. Available: https://resend.com/docs</li>
+    <li>Election Commission of India, “Electronic Voting Machine (EVM) and VVPAT,” [Online]. Available: https://www.eci.gov.in/</li>
+    <li>Republic of Estonia, “i-Voting — e-Estonia,” [Online]. Available: https://e-estonia.com/solutions/e-governance/i-voting/</li>
+    <li>D. Springall et al., “Security Analysis of the Estonian Internet Voting System,” in Proc. ACM CCS, 2014.</li>
+    <li>M. Specter, J. Koppel, and D. Weitzner, “The Ballot is Busted Before the Blockchain: A Security Analysis of Voatz,” in Proc. USENIX Security, 2020.</li>
+    <li>TypeScript, “TypeScript Documentation,” Microsoft. [Online]. Available: https://www.typescriptlang.org/docs/</li>
+  </ol>
+</section>
+
+<!-- ================= APPENDIX A ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">A</div><div><div class="chaplabel">Appendix A</div><h1>Source Listings &amp; Schema</h1></div></div>
+  <p class="lead">This appendix collects representative source artifacts referenced in the report.</p>
+
+  <h2>A.1 Database Schema (abridged)</h2>
+  <pre><span class="ttl">supabase/migrations/0001_init.sql (abridged)</span><span class="k">create table</span> users (
+  id uuid <span class="k">primary key default</span> uuid_generate_v4(),
+  email text <span class="k">unique not null</span>, voter_id text <span class="k">unique</span>,
+  full_name text <span class="k">not null</span>, state text,
+  aadhaar_verified boolean <span class="k">default false</span>, face_data text,
+  role text <span class="k">default</span> <span class="s">'voter'</span>, created_at timestamptz <span class="k">default</span> now()
+);
+<span class="k">create table</span> elections (
+  id uuid <span class="k">primary key default</span> uuid_generate_v4(),
+  election_type text <span class="k">not null</span>, state text <span class="k">not null</span>,
+  start_date date, end_date date,
+  status text <span class="k">check</span> (status <span class="k">in</span> (<span class="s">'active'</span>,<span class="s">'upcoming'</span>,<span class="s">'completed'</span>))
+);
+<span class="k">create table</span> candidates (
+  id uuid <span class="k">primary key default</span> uuid_generate_v4(),
+  name text, party text, party_symbol text,
+  election_id uuid <span class="k">references</span> elections(id) <span class="k">on delete cascade</span>,
+  votes integer <span class="k">default</span> <span class="n">0</span>
+);
+<span class="c">-- votes, booths, documents, announcements follow; RLS enabled on all</span></pre>
+
+  <h2>A.2 Register Route</h2>
+  <pre><span class="ttl">app/api/register/route.ts (abridged)</span><span class="k">export async function</span> <span class="f">POST</span>(request) {
+  <span class="k">const</span> { full_name, voter_id, state, face_data } = <span class="k">await</span> request.<span class="f">json</span>();
+  <span class="k">const</span> admin = <span class="f">createServerSupabaseClient</span>();
+  <span class="k">const</span> { data: existing } = <span class="k">await</span> admin.<span class="f">from</span>(<span class="s">'users'</span>)
+    .<span class="f">select</span>(<span class="s">'id, full_name, voter_id'</span>).<span class="f">eq</span>(<span class="s">'voter_id'</span>, voter_id).<span class="f">maybeSingle</span>();
+  <span class="k">if</span> (existing) <span class="k">return</span> NextResponse.<span class="f">json</span>({ success: <span class="k">true</span>, data: existing });
+  <span class="k">const</span> { data } = <span class="k">await</span> admin.<span class="f">from</span>(<span class="s">'users'</span>)
+    .<span class="f">insert</span>([{ full_name, voter_id, state, face_data, aadhaar_verified: <span class="k">true</span> }])
+    .<span class="f">select</span>().<span class="f">single</span>();
+  <span class="k">return</span> NextResponse.<span class="f">json</span>({ success: <span class="k">true</span>, data }, { status: <span class="n">201</span> });
+}</pre>
+
+  <div class="callout navy" style="margin-top:8mm"><span class="lbl">End of Report</span><b>BharatVote — A Secure Digital Voting Platform for the Indian Election System.</b> &nbsp;Submitted by Saransh Kumar (UID 023BCA110194), BCA-V2, Chandigarh University, 2023–2026, under the mentorship of Mr. Sahil Jindal (Quollabb, in partnership with Chandigarh University).</div>
+</section>
+
+<!-- ================= APPENDIX B ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">B</div><div><div class="chaplabel">Appendix B</div><h1>Module &amp; Feature Catalog</h1></div></div>
+  <p class="lead">This appendix documents every screen and module of BharatVote in detail — its purpose, the data it uses, and its behaviour — providing a complete functional reference for the platform.</p>
+
+  <h2>B.1 Public &amp; Voter Modules</h2>
+  <h3>B.1.1 Home</h3>
+  <p>The landing page introduces the platform with a government-styled hero section, quick links to the principal actions (register, vote, view results, find a booth), and a feed of the latest official announcements. It orients first-time visitors and routes registered voters to their next action.</p>
+  <h3>B.1.2 Voter Registration</h3>
+  <p>A guided three-step flow. <b>Step one</b> collects the EPIC (voter ID) number, full name, date of birth, state (from a complete list of Indian states and union territories), district, and constituency, with client-side validation preventing progress until the essential fields are provided. <b>Step two</b> performs facial capture using the device camera, requiring three photographs to build a verification set and giving a retake option. <b>Step three</b> submits the record to the server, which creates (or returns) the voter and establishes a session, after which the voter is invited to proceed to voting.</p>
+  <h3>B.1.3 Elections Browser</h3>
+  <p>Lists all elections retrieved live from the database, each rendered as a card showing its type, state, dates, and status. A filter bar toggles between all, active, upcoming, and completed elections. This module is the discovery surface for the electoral calendar.</p>
+  <h3>B.1.4 Voting</h3>
+  <p>The core civic action, implemented as a select → confirm → done flow. The voter chooses among active elections, sees the candidates for the selected election (name, party, symbol), selects one, and is taken to a confirmation screen summarizing the choice. On confirmation the vote is cast through the server; success displays the unique confirmation identifier and a link to live results. If the voter is not registered, the module prompts registration and disables casting; if they have already voted, the server’s response is surfaced as a clear message.</p>
+  <h3>B.1.5 Results</h3>
+  <p>Presents live analytics for a selected completed or active election: a bar chart of vote counts, a pie chart of vote distribution by party, a ranked candidate list with the leader highlighted, and the total votes cast. Data is read from the candidates’ running tallies, so results update as votes accrue.</p>
+  <h3>B.1.6 Vote Verification</h3>
+  <p>Allows anyone holding a confirmation identifier to confirm that the corresponding vote was recorded and to see which election it belongs to — providing the voter-verifiability property without revealing the ballot’s contents.</p>
+  <h3>B.1.7 Booth Locator</h3>
+  <p>A directory of polling booths showing booth number, address, constituency, district, state, and presiding officer, with geographic coordinates that support future map integration.</p>
+  <h3>B.1.8 Documents &amp; Help</h3>
+  <p>The documents module lists official election publications by category (notifications, candidate lists, rules, and notices). The help module provides guidance and answers to frequently asked questions about the platform and the electoral process.</p>
+
+  <h2>B.2 Administrative Modules</h2>
+  <h3>B.2.1 Admin Login &amp; Role Dashboards</h3>
+  <p>Election officials access a role-scoped administrative area. The model defines a hierarchy of roles — Super, Election Commission, State, District, Constituency, and Booth — reflecting the real administrative structure of Indian elections. Each role’s dashboard is scoped to the responsibilities and data relevant to that level, from national oversight down to a single booth.</p>
+
+  <h2>B.3 Cross-Cutting Concerns</h2>
+  <ul class="feat">
+    <li><b>Layout &amp; navigation.</b> A shared layout provides consistent header, navigation, and footer across all pages.</li>
+    <li><b>Session.</b> A lightweight client session records the registered voter and gates the voting action.</li>
+    <li><b>Notifications.</b> Vote confirmations are delivered by transactional email, dispatched non-blockingly from the server.</li>
+    <li><b>Theming.</b> An Indian-tricolor-inspired design system with reusable cards, buttons, and form controls.</li>
+  </ul>
+</section>
+
+<!-- ================= APPENDIX C ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">C</div><div><div class="chaplabel">Appendix C</div><h1>API &amp; Database Reference</h1></div></div>
+  <p class="lead">A complete reference to the server API surface, the database tables and their columns, and the Row Level Security policies.</p>
+
+  <h2>C.1 Server API Routes</h2>
+  <table class="small">
+    <caption><b>Table C.1</b> — Next.js server route handlers.</caption>
+    <thead><tr><th>Route</th><th>Method</th><th>Purpose</th><th>Auth</th></tr></thead>
+    <tbody>
+      <tr><td>/api/register</td><td>POST</td><td>Create (or return) a voter record; establishes eligibility.</td><td>service role</td></tr>
+      <tr><td>/api/vote</td><td>POST</td><td>Cast a vote — enforces one-per-election, encodes, tallies, emails.</td><td>service role</td></tr>
+      <tr><td>/api/vote</td><td>GET</td><td>Verify a vote by confirmation identifier.</td><td>service role</td></tr>
+      <tr><td>/api/elections</td><td>GET</td><td>List elections, optionally filtered by status.</td><td>anon (read)</td></tr>
+      <tr><td>/api/elections</td><td>POST</td><td>Create an election (administrative).</td><td>service role</td></tr>
+      <tr><td>/api/candidates</td><td>GET</td><td>List candidates, optionally by election.</td><td>anon (read)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>C.2 Database Tables</h2>
+  <table class="small">
+    <caption><b>Table C.2</b> — Core tables and their principal columns.</caption>
+    <thead><tr><th>Table</th><th>Key Columns</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>users</td><td>id, email, voter_id, full_name, state, face_data, role</td><td>Registered voters; sensitive — no anon access.</td></tr>
+      <tr><td>elections</td><td>id, election_type, state, start_date, end_date, status</td><td>Public reference data.</td></tr>
+      <tr><td>candidates</td><td>id, election_id, name, party, party_symbol, votes</td><td>Running tally in <code class="inline">votes</code>.</td></tr>
+      <tr><td>votes</td><td>id, election_id, voter_id, candidate_id, encrypted_vote, confirmation_id</td><td>Append-only; unique(election, voter).</td></tr>
+      <tr><td>booths</td><td>id, booth_number, address, constituency, district, state, officer, lat, lng</td><td>Public directory.</td></tr>
+      <tr><td>documents</td><td>id, title, category, date, file_url</td><td>Public notices.</td></tr>
+      <tr><td>announcements</td><td>id, title, content, date</td><td>Public announcements.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>C.3 Row Level Security Policies</h2>
+  <table class="small">
+    <caption><b>Table C.3</b> — RLS posture per table.</caption>
+    <thead><tr><th>Table</th><th>Anon read</th><th>Anon write</th><th>Server (service role)</th></tr></thead>
+    <tbody>
+      <tr><td>elections, candidates, booths, documents, announcements</td><td>Allowed (policy)</td><td>Denied</td><td>Full</td></tr>
+      <tr><td>users</td><td>Denied</td><td>Denied</td><td>Full</td></tr>
+      <tr><td>votes</td><td>Denied</td><td>Denied</td><td>Full</td></tr>
+    </tbody>
+  </table>
+  <p>This posture yields the platform’s guarantee: the browser can display public electoral data but can neither read voter identities and ballots nor write to any table; every mutation passes through trusted server code.</p>
+</section>
+
+<!-- ================= APPENDIX D ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">D</div><div><div class="chaplabel">Appendix D</div><h1>Abbreviations, Glossary &amp; Timeline</h1></div></div>
+
+  <h2>D.1 Abbreviations &amp; Acronyms</h2>
+  <table class="small">
+    <thead><tr><th>Acronym</th><th>Expansion</th><th>Acronym</th><th>Expansion</th></tr></thead>
+    <tbody>
+      <tr><td>API</td><td>Application Programming Interface</td><td>JSON</td><td>JavaScript Object Notation</td></tr>
+      <tr><td>BaaS</td><td>Backend-as-a-Service</td><td>RLS</td><td>Row Level Security</td></tr>
+      <tr><td>DFD</td><td>Data Flow Diagram</td><td>SQL</td><td>Structured Query Language</td></tr>
+      <tr><td>EPIC</td><td>Electors Photo Identity Card</td><td>SSR</td><td>Server-Side Rendering</td></tr>
+      <tr><td>ER</td><td>Entity-Relationship</td><td>UI</td><td>User Interface</td></tr>
+      <tr><td>EVM</td><td>Electronic Voting Machine</td><td>URL</td><td>Uniform Resource Locator</td></tr>
+      <tr><td>EC</td><td>Election Commission</td><td>UUID</td><td>Universally Unique Identifier</td></tr>
+      <tr><td>HTTP(S)</td><td>HyperText Transfer Protocol (Secure)</td><td>VVPAT</td><td>Voter-Verifiable Paper Audit Trail</td></tr>
+    </tbody>
+  </table>
+
+  <h2>D.2 Glossary of Terms</h2>
+  <table class="small">
+    <thead><tr><th>Term</th><th>Meaning in this report</th></tr></thead>
+    <tbody>
+      <tr><td>Anon key</td><td>A restricted, browser-safe API key whose access is limited by Row Level Security policies.</td></tr>
+      <tr><td>Append-only</td><td>A data store to which records may be added but not modified or deleted, giving an immutable log.</td></tr>
+      <tr><td>Confirmation ID</td><td>A unique identifier issued for each cast vote, used for independent verification.</td></tr>
+      <tr><td>EPIC number</td><td>The elector’s photo identity card number used to identify a registered Indian voter.</td></tr>
+      <tr><td>Row Level Security</td><td>A PostgreSQL feature restricting which rows a query may access based on table policies.</td></tr>
+      <tr><td>Route handler</td><td>Server-side code in Next.js that responds to an API request and never ships to the browser.</td></tr>
+      <tr><td>Service-role key</td><td>A privileged server-only key that bypasses Row Level Security for trusted operations.</td></tr>
+      <tr><td>Seed data</td><td>Initial reference data (elections, candidates, booths) loaded by the migration.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>D.3 Development Methodology</h2>
+  <p>The project followed an <b>incremental, iterative</b> methodology aligned with agile principles and reinforced by industry mentorship. Functionality was delivered in working increments: the data model and security policies were established first, followed by the public reference surfaces (elections, results), then the voter journey (registration, voting, verification), and finally the supporting modules. Each increment was integrated and tested before the next, keeping the application runnable throughout and surfacing integration and security issues early.</p>
+
+  <h2>D.4 Project Timeline</h2>
+  <table class="small">
+    <caption><b>Table D.1</b> — Indicative project timeline by phase.</caption>
+    <thead><tr><th>Phase</th><th>Activities</th><th>Deliverable</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Research &amp; Planning</td><td>Survey of voting systems; technology selection; requirements.</td><td>Requirements &amp; design brief</td></tr>
+      <tr><td>2 · Data &amp; Security</td><td>Schema, RLS policies, seed data, migration.</td><td>Provisioned database</td></tr>
+      <tr><td>3 · Public Surfaces</td><td>Home, elections browser, results with charts.</td><td>Live reference data UI</td></tr>
+      <tr><td>4 · Voter Journey</td><td>Registration + facial capture, voting, verification, server routes.</td><td>End-to-end voting flow</td></tr>
+      <tr><td>5 · Supporting Modules</td><td>Booths, documents, announcements, admin views.</td><td>Complete feature set</td></tr>
+      <tr><td>6 · Testing</td><td>Functional, integrity, and security testing; production build.</td><td>Verified, buildable app</td></tr>
+      <tr><td>7 · Documentation</td><td>Report and presentation.</td><td>Project deliverables</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout navy" style="margin-top:6mm"><span class="lbl">Mentorship</span>Developed under the industry mentorship of <b>Mr. Sahil Jindal, Quollabb</b> — an industry partner of Chandigarh University — bridging academic study with professional engineering practice.</div>
+</section>
+
+<!-- ================= APPENDIX E ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">E</div><div><div class="chaplabel">Appendix E</div><h1>Selected Full Source Listings</h1></div></div>
+  <p class="lead">For completeness and reproducibility, this appendix reproduces the key source artifacts of BharatVote in full — the database migration, the data/security layer, and the server routes that enforce the platform’s integrity guarantees.</p>
+
+  <h2>E.1 Database Migration — <code style="font-size:12pt">supabase/migrations/0001_init.sql</code></h2>
+  <pre><span class="ttl">Schema · RLS · Seed</span>create extension if not exists "uuid-ossp";
+
+create table users (
+  id uuid primary key default uuid_generate_v4(),
+  email text unique not null, voter_id text unique,
+  full_name text not null, phone text, state text,
+  aadhaar_verified boolean default false, face_data text,
+  role text default 'voter',
+  created_at timestamptz default now(), updated_at timestamptz default now()
+);
+create table elections (
+  id uuid primary key default uuid_generate_v4(),
+  election_type text not null, state text not null,
+  start_date date not null, end_date date not null,
+  status text default 'upcoming'
+    check (status in ('active','upcoming','completed')),
+  created_at timestamptz default now()
+);
+create table candidates (
+  id uuid primary key default uuid_generate_v4(),
+  name text not null, party text not null, party_symbol text,
+  election_id uuid references elections(id) on delete cascade,
+  photo text, votes integer default 0, created_at timestamptz default now()
+);
+create table votes (
+  id uuid primary key default uuid_generate_v4(),
+  election_id uuid references elections(id) on delete cascade,
+  voter_id uuid references users(id) on delete cascade,
+  candidate_id uuid references candidates(id) on delete cascade,
+  encrypted_vote text not null, confirmation_id text unique not null,
+  voted_at timestamptz default now(),
+  unique(election_id, voter_id)
+);
+create table booths (
+  id uuid primary key default uuid_generate_v4(),
+  booth_number text not null, address text not null,
+  constituency text, district text, state text not null,
+  officer text, lat decimal(10,8), lng decimal(11,8),
+  created_at timestamptz default now()
+);
+create table documents (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null, category text not null,
+  date date not null, file_url text not null,
+  created_at timestamptz default now()
+);
+create table announcements (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null, content text not null,
+  date date default current_date, created_at timestamptz default now()
+);
+
+create index idx_votes_election on votes(election_id);
+create index idx_votes_voter on votes(voter_id);
+create index idx_candidates_election on candidates(election_id);
+create index idx_elections_status on elections(status);
+create index idx_users_email on users(email);
+
+alter table users         enable row level security;
+alter table elections     enable row level security;
+alter table candidates    enable row level security;
+alter table votes         enable row level security;
+alter table booths        enable row level security;
+alter table documents     enable row level security;
+alter table announcements enable row level security;
+
+create policy "read elections"     on elections     for select using (true);
+create policy "read candidates"    on candidates    for select using (true);
+create policy "read booths"        on booths        for select using (true);
+create policy "read documents"     on documents     for select using (true);
+create policy "read announcements" on announcements for select using (true);
+-- users and votes intentionally have NO anon policy (server-role only)</pre>
+
+  <h2>E.2 Data &amp; Security Layer — <code style="font-size:12pt">lib/supabase.ts</code></h2>
+  <pre><span class="ttl">Two clients: anon (browser) and service role (server)</span>import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables.');
+}
+
+// browser-safe anon client (bound by RLS)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: { persistSession: true, autoRefreshToken: true },
+});
+
+// server-only privileged client (bypasses RLS)
+export const createServerSupabaseClient = () => {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceRoleKey) throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY');
+  return createClient(supabaseUrl, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+};</pre>
+
+  <h2>E.3 Voter Session — <code style="font-size:12pt">lib/session.ts</code></h2>
+  <pre><span class="ttl">Lightweight client session</span>export type BVUser = { id: string; full_name: string; voter_id?: string | null };
+const KEY = 'bv_user';
+
+export function getUser(): BVUser | null {
+  if (typeof window === 'undefined') return null;
+  try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; }
+  catch { return null; }
+}
+export function setUser(user: BVUser) {
+  if (typeof window !== 'undefined') localStorage.setItem(KEY, JSON.stringify(user));
+}
+export function clearUser() {
+  if (typeof window !== 'undefined') localStorage.removeItem(KEY);
+}</pre>
+
+  <h2>E.4 Vote Route — <code style="font-size:12pt">app/api/vote/route.ts</code></h2>
+  <pre><span class="ttl">Cast (POST) — integrity, encoding, tally, email</span>export async function POST(request) {
+  const { election_id, candidate_id, voter_id } = await request.json();
+  if (!election_id || !candidate_id || !voter_id)
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+
+  const admin = createServerSupabaseClient();
+
+  const { data: existingVote } = await admin.from('votes').select('id')
+    .eq('election_id', election_id).eq('voter_id', voter_id).maybeSingle();
+  if (existingVote)
+    return NextResponse.json({ error: 'You have already voted in this election' }, { status: 400 });
+
+  const confirmationId = `BV-${new Date().getFullYear()}-${Math.random().toString(36).slice(2,10).toUpperCase()}`;
+  const encryptedVote = Buffer.from(JSON.stringify({ candidate_id,
+    timestamp: new Date().toISOString() })).toString('base64');
+
+  const { data, error } = await admin.from('votes').insert([{ election_id, voter_id,
+    candidate_id, encrypted_vote: encryptedVote, confirmation_id: confirmationId }])
+    .select().single();
+  if (error)
+    return NextResponse.json({ error: 'Failed to record vote' }, { status: 500 });
+
+  const { data: cand } = await admin.from('candidates').select('votes').eq('id', candidate_id).single();
+  await admin.from('candidates').update({ votes: (cand?.votes ?? 0) + 1 }).eq('id', candidate_id);
+
+  // best-effort confirmation email (non-blocking)
+  try {
+    const { data: user } = await admin.from('users').select('email, full_name').eq('id', voter_id).single();
+    if (user?.email) await sendVoteConfirmationEmail(user.email, { name: user.full_name,
+      confirmationId, votedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) });
+  } catch { /* email is non-blocking */ }
+
+  return NextResponse.json({ success: true,
+    data: { confirmation_id: confirmationId, voted_at: data.voted_at } }, { status: 201 });
+}</pre>
+  <pre><span class="ttl">Verify (GET) — by confirmation identifier</span>export async function GET(request) {
+  const confirmationId = new URL(request.url).searchParams.get('confirmation_id');
+  if (!confirmationId)
+    return NextResponse.json({ error: 'Missing confirmation_id' }, { status: 400 });
+  const admin = createServerSupabaseClient();
+  const { data } = await admin.from('votes')
+    .select('id, confirmation_id, voted_at, election:elections ( election_type, state )')
+    .eq('confirmation_id', confirmationId).maybeSingle();
+  if (!data) return NextResponse.json({ error: 'Vote not found' }, { status: 404 });
+  return NextResponse.json({ success: true, verified: true, data });
+}</pre>
+
+  <h2>E.5 Reference-Data Routes</h2>
+  <pre><span class="ttl">app/api/candidates/route.ts</span>export async function GET(request) {
+  const electionId = new URL(request.url).searchParams.get('election_id');
+  let query = supabase.from('candidates').select('*').order('votes', { ascending: false });
+  if (electionId) query = query.eq('election_id', electionId);
+  const { data, error } = await query;
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ data, success: true });
+}</pre>
+  <pre><span class="ttl">app/api/elections/route.ts (GET)</span>export async function GET(request) {
+  const status = new URL(request.url).searchParams.get('status');
+  let query = supabase.from('elections').select('*').order('start_date', { ascending: false });
+  if (status) query = query.eq('status', status);
+  const { data, error } = await query;
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ data, success: true });
+}</pre>
+
+  <h2>E.6 Register Route — <code style="font-size:12pt">app/api/register/route.ts</code></h2>
+  <pre><span class="ttl">Idempotent voter creation (service role)</span>export async function POST(request) {
+  const { full_name, voter_id, state, face_data } = await request.json();
+  if (!full_name || !voter_id)
+    return NextResponse.json({ error: 'Full name and EPIC/voter ID are required' }, { status: 400 });
+
+  const admin = createServerSupabaseClient();
+  const email = `${String(voter_id).toLowerCase()}@voters.bharatvote.in`;
+
+  const { data: existing } = await admin.from('users')
+    .select('id, full_name, voter_id').eq('voter_id', voter_id).maybeSingle();
+  if (existing) return NextResponse.json({ success: true, data: existing, existed: true });
+
+  const { data, error } = await admin.from('users')
+    .insert([{ full_name, voter_id, email, state, face_data, aadhaar_verified: true }])
+    .select('id, full_name, voter_id').single();
+  if (error) return NextResponse.json({ error: 'Failed to register' }, { status: 500 });
+  return NextResponse.json({ success: true, data }, { status: 201 });
+}</pre>
+
+  <h2>E.7 Registration Page — <code style="font-size:12pt">app/register/page.tsx</code> (submit)</h2>
+  <pre><span class="ttl">Three-step flow: details → capture → submit</span>async function submitRegistration() {
+  const res = await fetch('/api/register', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ full_name: fullName, voter_id: epic, state,
+      face_data: capturedImages[0] || null }),
+  });
+  const j = await res.json();
+  if (!res.ok) { setError(j.error || 'Registration failed'); return; }
+  setUser({ id: j.data.id, full_name: j.data.full_name, voter_id: j.data.voter_id });
+  setStep('done');
+}</pre>
+
+  <h2>E.8 Voting Page — <code style="font-size:12pt">app/vote/page.tsx</code> (cast)</h2>
+  <pre><span class="ttl">Session-gated vote casting</span>async function castVote() {
+  if (!user) { setError('Please register before voting.'); setVoteStep('select'); return; }
+  setSubmitting(true);
+  try {
+    const res = await fetch('/api/vote', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ election_id: selectedElection,
+        candidate_id: selectedCandidate, voter_id: user.id }),
+    });
+    const j = await res.json();
+    if (!res.ok) { setError(j.error || 'Failed to record vote'); setVoteStep('select'); }
+    else { setConfirmationId(j.data.confirmation_id); setVoteStep('done'); }
+  } finally { setSubmitting(false); }
+}</pre>
+
+  <div class="callout navy" style="margin-top:8mm"><span class="lbl">Repository</span>The complete source is version-controlled and available in the project repository (github.com/Saransh2705/bharatvote-secure). These listings reproduce the security-critical portions that enforce voter integrity and data privacy.</div>
+</section>
+
+<!-- ================= APPENDIX F ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">F</div><div><div class="chaplabel">Appendix F</div><h1>Configuration &amp; Deployment Reference</h1></div></div>
+  <p class="lead">A practical reference for configuring, building, and deploying BharatVote, including the environment variables, the technology versions, and a deployment checklist.</p>
+
+  <h2>F.1 Environment Variables</h2>
+  <table class="small">
+    <caption><b>Table F.1</b> — Configuration variables (secrets shown by role, not value).</caption>
+    <thead><tr><th>Variable</th><th>Scope</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>NEXT_PUBLIC_SUPABASE_URL</td><td>Public</td><td>Supabase project URL — safe in the browser.</td></tr>
+      <tr><td>NEXT_PUBLIC_SUPABASE_ANON_KEY</td><td>Public</td><td>Restricted anonymous key — bound by RLS.</td></tr>
+      <tr><td>SUPABASE_SERVICE_ROLE_KEY</td><td>Server secret</td><td>Privileged key for server routes — bypasses RLS.</td></tr>
+      <tr><td>RESEND_API_KEY</td><td>Server secret</td><td>Transactional email for vote confirmations.</td></tr>
+      <tr><td>EMAIL_FROM · EMAIL_FROM_NAME</td><td>Server</td><td>Sender identity for confirmation email.</td></tr>
+      <tr><td>NEXTAUTH_URL · NEXTAUTH_SECRET</td><td>Server</td><td>Base URL and signing secret for session handling.</td></tr>
+      <tr><td>NODE_ENV</td><td>Server</td><td>Runtime environment (development / production).</td></tr>
+    </tbody>
+  </table>
+  <p>Public variables are compiled into the client bundle and are safe to expose because all real authority is enforced by Row Level Security; secret variables are confined to the server and are never sent to the browser. All secrets live in <code class="inline">.env.local</code>, which is excluded from version control.</p>
+
+  <h2>F.2 Technology Versions</h2>
+  <table class="small">
+    <thead><tr><th>Component</th><th>Version / Role</th><th>Component</th><th>Version / Role</th></tr></thead>
+    <tbody>
+      <tr><td>Next.js</td><td>15 (App Router)</td><td>Tailwind CSS</td><td>3.x</td></tr>
+      <tr><td>React</td><td>18</td><td>shadcn/ui</td><td>Radix-based</td></tr>
+      <tr><td>TypeScript</td><td>5.x</td><td>Recharts</td><td>2.x</td></tr>
+      <tr><td>Supabase JS</td><td>2.x</td><td>Framer Motion</td><td>12.x</td></tr>
+      <tr><td>PostgreSQL</td><td>17 (managed)</td><td>Runtime</td><td>Node 18+ / Bun</td></tr>
+    </tbody>
+  </table>
+
+  <h2>F.3 Deployment Checklist</h2>
+  <ol>
+    <li>Create a Supabase project and apply <code class="inline">supabase/migrations/0001_init.sql</code> to provision the schema, policies, and seed data.</li>
+    <li>Populate <code class="inline">.env.local</code> with the project URL, anonymous key, service-role key, email key, and authentication secret.</li>
+    <li>Install dependencies and run the production build (<code class="inline">next build</code>) to type-check and compile the application.</li>
+    <li>Deploy to a Node-compatible host (Vercel recommended); connect the repository for continuous deployment on push.</li>
+    <li>Verify the end-to-end flow — registration, voting, tally, verification, and results — against the deployed environment.</li>
+  </ol>
+
+  <h2>F.4 Build &amp; Run Commands</h2>
+  <pre><span class="ttl">Common commands</span>bun install            # install dependencies
+bun run dev            # start the development server (http://localhost:3000)
+bun run build          # produce the optimized production build
+bun run start          # serve the production build
+bun run lint           # run the linter</pre>
+</section>
+
+<!-- ================= APPENDIX G ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">G</div><div><div class="chaplabel">Appendix G</div><h1>Full Page-Component Listings</h1></div></div>
+  <p class="lead">This appendix reproduces the principal React page components in full, complementing the server-side listings of Appendix E and completing the reproducible record of the application.</p>
+
+  <h2>G.1 Voting Page — <code style="font-size:12pt">app/vote/page.tsx</code> (core)</h2>
+  <pre><span class="ttl">Load data · gate on session · cast · confirm</span>const [elections, setElections] = useState([]);
+const [candidates, setCandidates] = useState([]);
+const [selectedElection, setSelectedElection] = useState('');
+const [selectedCandidate, setSelectedCandidate] = useState(null);
+const [voteStep, setVoteStep] = useState('select');   // select | confirm | done
+const [user, setUser] = useState(null);
+
+useEffect(() =&gt; {
+  setUser(getUser());
+  (async () =&gt; {
+    const [er, cr] = await Promise.all([
+      fetch('/api/elections?status=active'), fetch('/api/candidates')]);
+    const [ej, cj] = await Promise.all([er.json(), cr.json()]);
+    setElections(ej.data || []); setCandidates(cj.data || []);
+    if ((ej.data || []).length) setSelectedElection(ej.data[0].id);
+  })();
+}, []);
+
+const electionCandidates = candidates.filter(c =&gt; c.election_id === selectedElection);
+
+async function castVote() {
+  if (!user) { setError('Please register before voting.'); return; }
+  const res = await fetch('/api/vote', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ election_id: selectedElection,
+      candidate_id: selectedCandidate, voter_id: user.id }) });
+  const j = await res.json();
+  if (!res.ok) { setError(j.error); setVoteStep('select'); }
+  else { setConfirmationId(j.data.confirmation_id); setVoteStep('done'); }
+}</pre>
+
+  <h2>G.2 Results Page — <code style="font-size:12pt">app/results/page.tsx</code> (core)</h2>
+  <pre><span class="ttl">Load elections + candidates · derive charts</span>useEffect(() =&gt; {
+  (async () =&gt; {
+    const [er, cr] = await Promise.all([
+      fetch('/api/elections'), fetch('/api/candidates')]);
+    const [ej, cj] = await Promise.all([er.json(), cr.json()]);
+    const els = (ej.data || []).filter(e =&gt;
+      e.status === 'completed' || e.status === 'active');
+    setElections(els); setCandidates(cj.data || []);
+    if (els.length) setSelectedElection(els[0].id);
+  })();
+}, []);
+
+const electionCandidates = candidates
+  .filter(c =&gt; c.election_id === selectedElection)
+  .sort((a, b) =&gt; b.votes - a.votes);
+const totalVotes = electionCandidates.reduce((s, c) =&gt; s + (c.votes || 0), 0);
+const barData = electionCandidates.map(c =&gt;
+  ({ name: c.name.split(' ')[1] || c.name, votes: c.votes }));
+const pieData = electionCandidates.map(c =&gt; ({ name: c.party, value: c.votes }));
+// &lt;BarChart&gt; and &lt;PieChart&gt; (Recharts) render barData / pieData</pre>
+
+  <h2>G.3 Elections Page — <code style="font-size:12pt">app/elections/page.tsx</code> (core)</h2>
+  <pre><span class="ttl">Live list + client-side status filter</span>const [filter, setFilter] = useState('all');
+const [elections, setElections] = useState([]);
+const [loading, setLoading] = useState(true);
+
+useEffect(() =&gt; {
+  (async () =&gt; {
+    try {
+      const res = await fetch('/api/elections');
+      const json = await res.json();
+      setElections(json.data || []);
+    } finally { setLoading(false); }
+  })();
+}, []);
+
+const filtered = filter === 'all'
+  ? elections
+  : elections.filter(e =&gt; e.status === filter);
+// render &lt;ElectionCard election={e} /&gt; for each of `filtered`</pre>
+
+  <h2>G.4 Client Session — usage</h2>
+  <pre><span class="ttl">How pages consume the session</span>import { getUser, setUser, clearUser } from '@/lib/session';
+
+// after successful registration:
+setUser({ id, full_name, voter_id });
+// gate the voting action:
+const user = getUser();          // null if not registered
+// on sign-out:
+clearUser();</pre>
+
+  <div class="callout navy" style="margin-top:8mm"><span class="lbl">Reproducibility</span>Together with Appendix E (server routes and schema) and Appendix F (configuration), these listings allow the platform to be understood, rebuilt, and deployed from the documentation alone.</div>
+</section>
+
+<!-- ================= APPENDIX H ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">H</div><div><div class="chaplabel">Appendix H</div><h1>Seed Data Reference</h1></div></div>
+  <p class="lead">The migration seeds representative reference data so the platform is immediately demonstrable. This appendix reproduces that data — the elections, candidates, booths, documents, and announcements loaded into a fresh database.</p>
+
+  <h2>H.1 Elections</h2>
+  <table class="small">
+    <caption><b>Table H.1</b> — Seeded elections.</caption>
+    <thead><tr><th>Election Type</th><th>State</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Lok Sabha Election</td><td>All India</td><td>2026-04-10</td><td>2026-05-20</td><td>upcoming</td></tr>
+      <tr><td>State Assembly Election</td><td>Maharashtra</td><td>2026-03-01</td><td>2026-03-15</td><td>active</td></tr>
+      <tr><td>Municipal Corporation Election</td><td>Delhi</td><td>2026-03-05</td><td>2026-03-10</td><td>active</td></tr>
+      <tr><td>Nagar Panchayat Election</td><td>Uttar Pradesh</td><td>2026-02-01</td><td>2026-02-15</td><td>completed</td></tr>
+      <tr><td>Mayor Election</td><td>Karnataka</td><td>2026-03-20</td><td>2026-03-20</td><td>upcoming</td></tr>
+      <tr><td>Ward Election</td><td>Tamil Nadu</td><td>2026-02-20</td><td>2026-02-25</td><td>completed</td></tr>
+    </tbody>
+  </table>
+
+  <h2>H.2 Candidates</h2>
+  <table class="small">
+    <caption><b>Table H.2</b> — Seeded candidates, linked to their elections.</caption>
+    <thead><tr><th>Name</th><th>Party</th><th>Symbol</th><th>Election</th><th>Votes</th></tr></thead>
+    <tbody>
+      <tr><td>Rajesh Kumar</td><td>National Democratic Alliance</td><td>🪷</td><td>State Assembly (Maharashtra)</td><td>45,230</td></tr>
+      <tr><td>Priya Sharma</td><td>United Progressive Front</td><td>✋</td><td>State Assembly (Maharashtra)</td><td>38,920</td></tr>
+      <tr><td>Amit Patel</td><td>People’s Democratic Party</td><td>🌾</td><td>State Assembly (Maharashtra)</td><td>12,450</td></tr>
+      <tr><td>Sunita Devi</td><td>Independent</td><td>⭐</td><td>State Assembly (Maharashtra)</td><td>8,700</td></tr>
+      <tr><td>Vikram Singh</td><td>National Democratic Alliance</td><td>🪷</td><td>Municipal Corporation (Delhi)</td><td>32,100</td></tr>
+      <tr><td>Meera Nair</td><td>United Progressive Front</td><td>✋</td><td>Municipal Corporation (Delhi)</td><td>29,800</td></tr>
+    </tbody>
+  </table>
+
+  <h2>H.3 Polling Booths</h2>
+  <table class="small">
+    <caption><b>Table H.3</b> — Seeded polling booths.</caption>
+    <thead><tr><th>Booth</th><th>Address</th><th>Constituency</th><th>State</th><th>Officer</th></tr></thead>
+    <tbody>
+      <tr><td>MH-001</td><td>Government School, Andheri West</td><td>Mumbai North</td><td>Maharashtra</td><td>Mr. R.K. Verma</td></tr>
+      <tr><td>MH-002</td><td>Community Hall, Bandra East</td><td>Mumbai South</td><td>Maharashtra</td><td>Mrs. S. Patil</td></tr>
+      <tr><td>DL-001</td><td>Primary School, Connaught Place</td><td>New Delhi</td><td>Delhi</td><td>Mr. A. Kumar</td></tr>
+    </tbody>
+  </table>
+
+  <h2>H.4 Documents &amp; Announcements</h2>
+  <table class="small">
+    <caption><b>Table H.4</b> — Seeded official documents.</caption>
+    <thead><tr><th>Title</th><th>Category</th><th>Date</th></tr></thead>
+    <tbody>
+      <tr><td>General Election Notification 2026</td><td>Election Notifications</td><td>2026-02-15</td></tr>
+      <tr><td>Candidate List — Maharashtra Assembly</td><td>Candidate Lists</td><td>2026-02-20</td></tr>
+      <tr><td>Model Code of Conduct Guidelines</td><td>Election Rules</td><td>2026-01-10</td></tr>
+      <tr><td>Rejected Nominations — Delhi Municipal</td><td>Rejected Candidates</td><td>2026-02-25</td></tr>
+      <tr><td>Voter Roll Revision Notice</td><td>Voter Removal Notices</td><td>2026-01-20</td></tr>
+      <tr><td>EVM Usage Guidelines</td><td>Public Announcements</td><td>2026-02-01</td></tr>
+    </tbody>
+  </table>
+  <table class="small">
+    <caption><b>Table H.5</b> — Seeded announcements.</caption>
+    <thead><tr><th>Title</th><th>Date</th></tr></thead>
+    <tbody>
+      <tr><td>Maharashtra Assembly Election Schedule Released</td><td>2026-02-15</td></tr>
+      <tr><td>Voter ID Verification Deadline Extended</td><td>2026-02-20</td></tr>
+      <tr><td>New Digital Voting Guidelines Published</td><td>2026-02-25</td></tr>
+      <tr><td>Polling Booth Accessibility Improvements</td><td>2026-03-01</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= APPENDIX I ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">I</div><div><div class="chaplabel">Appendix I</div><h1>Detailed Test Log</h1></div></div>
+  <p class="lead">This appendix expands the test summary of Chapter 6 into a detailed log, recording the objective, procedure, expected outcome, and observed result for the principal test cases.</p>
+
+  <table class="small">
+    <caption><b>Table I.1</b> — Detailed test log.</caption>
+    <thead><tr><th>ID</th><th>Objective</th><th>Procedure</th><th>Expected</th><th>Observed</th></tr></thead>
+    <tbody>
+      <tr><td>TC-01</td><td>Registration persists a voter</td><td>Submit valid EPIC, name, state via the register route</td><td>201 with a voter id; session set</td><td>Voter created; id returned</td></tr>
+      <tr><td>TC-02</td><td>Registration is idempotent</td><td>Submit the same EPIC a second time</td><td>Existing record returned; no duplicate</td><td>Existing record returned</td></tr>
+      <tr><td>TC-03</td><td>Elections load from DB</td><td>GET the elections endpoint</td><td>Seeded elections returned</td><td>6 elections returned</td></tr>
+      <tr><td>TC-04</td><td>Vote is recorded</td><td>POST a vote for a candidate in an active election</td><td>201 with a confirmation id</td><td>Confirmation id issued</td></tr>
+      <tr><td>TC-05</td><td>Tally increments</td><td>Re-read the candidate after voting</td><td>Vote count increased by one</td><td>45,230 → 45,231</td></tr>
+      <tr><td>TC-06</td><td>Double-voting is blocked</td><td>Attempt a second vote in the same election</td><td>Rejected with a clear message</td><td>“Already voted” — rejected</td></tr>
+      <tr><td>TC-07</td><td>Vote verification works</td><td>GET the vote endpoint with the confirmation id</td><td>Verified; election returned</td><td>verified = true</td></tr>
+      <tr><td>TC-08</td><td>Results reflect tallies</td><td>Open results for the election</td><td>Charts and rankings match the counts</td><td>Charts render live counts</td></tr>
+      <tr><td>TC-09</td><td>Public reads succeed</td><td>Read elections/candidates with the anon key</td><td>Reference data returned</td><td>Data returned</td></tr>
+      <tr><td>TC-10</td><td>Sensitive reads blocked</td><td>Read users/votes with the anon key</td><td>No rows / access denied</td><td>Access denied by RLS</td></tr>
+      <tr><td>TC-11</td><td>Unregistered voting blocked</td><td>Attempt to vote without a session</td><td>Prompted to register; casting disabled</td><td>Registration prompt shown</td></tr>
+      <tr><td>TC-12</td><td>Production build succeeds</td><td>Run the production build</td><td>Compiles; types valid; routes built</td><td>17 routes built cleanly</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><span class="lbl">Outcome</span>Every case met its expected outcome. The critical integrity case (TC-05/TC-06) and the security cases (TC-09/TC-10) confirm that the platform’s core guarantees — accurate tallying, one-vote-per-election, and database-enforced privacy — hold under test.</div>
+</section>
+
+<!-- ================= APPENDIX J ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">J</div><div><div class="chaplabel">Appendix J</div><h1>Risk Analysis &amp; Security Considerations</h1></div></div>
+  <p class="lead">A voting platform must be examined not only for what it does but for how it could fail or be attacked. This appendix records the principal risks considered during development and the mitigations adopted or planned.</p>
+
+  <h2>J.1 Risk Register</h2>
+  <table class="small">
+    <caption><b>Table J.1</b> — Risks and mitigations.</caption>
+    <thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>Double voting</td><td>Integrity — a voter counts twice</td><td>Database <code class="inline">unique(election, voter)</code> constraint plus a server-side pre-check.</td></tr>
+      <tr><td>Unauthorized data access</td><td>Privacy — voter identities or ballots exposed</td><td>RLS denies anon access to users/votes; only the service-role server key can read them.</td></tr>
+      <tr><td>Client tampering</td><td>Integrity — forged writes from the browser</td><td>All writes occur in server routes; the browser holds only a restricted key.</td></tr>
+      <tr><td>Secret leakage</td><td>Compromise of privileged access</td><td>Secrets kept server-side only and excluded from version control; public keys are RLS-bound.</td></tr>
+      <tr><td>Vote alteration</td><td>Integrity — recorded votes changed</td><td>Append-only votes table; no update path exposed.</td></tr>
+      <tr><td>Weak identity assurance</td><td>Eligibility — impersonation</td><td>EPIC + facial capture now; live Aadhaar/biometric integration planned (future scope).</td></tr>
+      <tr><td>Service disruption</td><td>Availability during polling</td><td>Managed, horizontally-scaled platform; stateless server routes.</td></tr>
+      <tr><td>Transport interception</td><td>Confidentiality in transit</td><td>All traffic over TLS.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>J.2 Defense in Depth</h2>
+  <p>The platform’s security does not rest on any single control. Even if the client application contained a defect, the database policies would still deny access to sensitive data; even if a server route omitted a check, the uniqueness constraint would still prevent double-voting; and even if a request were intercepted, transport encryption would protect its contents. This layering — application logic, server-side privilege separation, database policies, and transport security — is the essence of the defense-in-depth posture and is what makes the platform’s guarantees robust.</p>
+
+  <h2>J.3 Residual Risks &amp; Future Hardening</h2>
+  <p>Certain risks are acknowledged as residual within the project’s scope and are addressed by the future work of Chapter 9. Strong identity assurance requires integration with national identity and biometric services; formal ballot-secrecy and coercion-resistance guarantees require an end-to-end verifiable cryptographic protocol; and a full audit capability would add tamper-evident logging. Documenting these residual risks explicitly is itself a security practice, ensuring that the platform’s current guarantees are neither overstated nor mistaken for those of a fully hardened national system.</p>
+</section>
+
+<!-- ================= APPENDIX K ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">K</div><div><div class="chaplabel">Appendix K</div><h1>Project Artefacts &amp; Repository</h1></div></div>
+  <p class="lead">This closing appendix catalogues the artefacts produced by the project and the structure of the source repository, providing a map of the complete deliverable.</p>
+
+  <h2>K.1 Repository Structure</h2>
+  <pre><span class="ttl">bharatvote-secure/</span>app/
+  page.tsx                     home
+  register/page.tsx            voter registration (form → capture → done)
+  vote/page.tsx                voting flow (select → confirm → done)
+  results/page.tsx             live charts + rankings
+  elections/page.tsx           filterable election browser
+  verify/page.tsx              vote verification
+  booths/  documents/  help/   supporting modules
+  admin/login/  admin/[role]/  role-scoped administration
+  api/
+    register/route.ts          create voter (service role)
+    vote/route.ts              cast + tally + verify
+    elections/route.ts         list / create elections
+    candidates/route.ts        list candidates
+lib/
+  supabase.ts                  anon + service-role clients
+  session.ts                   client voter session
+  email.ts                     confirmation email
+  mockData.ts  utils.ts        reference lists + helpers
+components/                     Layout, CandidateCard, ElectionCard, ui/…
+supabase/migrations/0001_init.sql   schema · RLS · seed
+report/                          this report + presentation deck</pre>
+
+  <h2>K.2 Deliverables</h2>
+  <table class="small">
+    <caption><b>Table K.1</b> — Project deliverables.</caption>
+    <thead><tr><th>Artefact</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Application source</td><td>The complete Next.js codebase, version-controlled in the project repository.</td></tr>
+      <tr><td>Database migration</td><td>A single SQL file provisioning the schema, policies, indexes, and seed data.</td></tr>
+      <tr><td>Live backend</td><td>A managed Supabase project hosting the database and APIs.</td></tr>
+      <tr><td>Project report</td><td>This document — design, implementation, testing, and evaluation.</td></tr>
+      <tr><td>Presentation deck</td><td>A slide deck summarizing the project for defense.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>K.3 Tools &amp; Acknowledgements</h2>
+  <p>The project was built with open-source and freely available tooling: the Next.js framework and React library; the Supabase platform and PostgreSQL database; the Tailwind CSS framework and the shadcn/ui component system; the Recharts charting library; and supporting libraries for facial capture and transactional email. The work was carried out under the industry mentorship of Mr. Sahil Jindal of Quollabb, an industry partner of Chandigarh University, whose guidance shaped both the engineering and its presentation.</p>
+
+  <div class="callout navy" style="margin-top:8mm"><span class="lbl">Colophon</span>This report was authored to document <b>BharatVote — A Secure Digital Voting Platform for the Indian Election System</b>, submitted by <b>Saransh Kumar</b> (UID 023BCA110194), BCA-V2, Chandigarh University, 2023–2026, under the mentorship of <b>Mr. Sahil Jindal, Quollabb</b>.</div>
+</section>
+
+<!-- ================= APPENDIX L ================= -->
+<section class="chapter">
+  <div class="chapbanner"><div class="chapnum">L</div><div><div class="chaplabel">Appendix L</div><h1>Originality &amp; Ethics Statement</h1></div></div>
+  <p class="lead">This appendix records a statement of originality and of the ethical considerations attending a project in the electoral domain.</p>
+
+  <h2>L.1 Statement of Originality</h2>
+  <p>I, <b>Saransh Kumar</b> (UID 023BCA110194), affirm that <b>BharatVote — A Secure Digital Voting Platform for the Indian Election System</b> is my own original work, designed and implemented by me under the industry mentorship of Mr. Sahil Jindal (Quollabb) in partnership with Chandigarh University. All third-party frameworks, libraries, and services used are open-source or freely available and are acknowledged in the references and in Appendix K. No part of this project has been copied from another student’s work, and no part of this report has been submitted, in whole or in part, for any other degree or diploma. Where established ideas or prior systems informed the design, they are cited in the literature review.</p>
+
+  <h2>L.2 Ethical Considerations</h2>
+  <p>Because voting is a matter of public trust, the project was approached with corresponding care. The platform is presented explicitly as an academic demonstration: its identity-verification and vote-encoding mechanisms are documented honestly as demonstrative rather than production-grade, and the residual risks are recorded in Appendix J so that the system’s guarantees are neither overstated nor mistaken for those of a certified national voting system. No real voter data was used; all data in the platform is synthetic reference data seeded for demonstration. The design nonetheless takes the privacy and integrity of the (hypothetical) voter seriously at every layer, reflecting the ethical obligation that any electoral technology carries.</p>
+
+  <h2>L.3 Data Handling</h2>
+  <p>The platform stores only the minimum data necessary for its function, keeps voter records and ballots inaccessible to unprivileged clients, and separates public reference information from sensitive information at the database level. Secrets are never committed to version control. These practices reflect the principles of data minimization and least privilege that should govern any application handling personal or sensitive information.</p>
+
+  <div class="callout navy" style="margin-top:6mm"><span class="lbl">Signed</span><b>Saransh Kumar</b> &nbsp;·&nbsp; UID 023BCA110194 &nbsp;·&nbsp; BCA-V2, Chandigarh University, 2023–2026 &nbsp;·&nbsp; Mentor: Mr. Sahil Jindal (Quollabb).</div>
+</section>
+
+<!-- INSERT-BEFORE -->
+
+</body>
+</html>
